@@ -1,0 +1,72 @@
+    "UPPER ROW
+
+nnoremap ; a
+nnoremap , z
+nnoremap . e
+nnoremap p r
+nnoremap y t
+nnoremap f y
+nnoremap g u
+nnoremap c i
+nnoremap r o
+nnoremap l p
+
+nnoremap : A
+"nnoremap < Z
+"nnoremap > E
+nnoremap P R
+nnoremap Y T
+nnoremap F Y
+nnoremap G U
+nnoremap C I
+nnoremap R O
+nnoremap L P
+
+    "HOME ROW
+
+nnoremap a q
+nnoremap o s
+nnoremap e d
+nnoremap u f
+nnoremap i g
+nnoremap d h
+nnoremap h j
+nnoremap t k
+nnoremap n l
+nnoremap s m
+
+nnoremap A Q
+nnoremap O S
+nnoremap E D
+nnoremap U F
+nnoremap I G
+nnoremap D H
+nnoremap H J
+nnoremap T K
+nnoremap N L
+nnoremap S M
+
+    "LOWER ROW
+
+nnoremap ' w
+nnoremap q x
+nnoremap j c
+nnoremap k v
+nnoremap x b
+nnoremap b n
+nnoremap m ,
+nnoremap w ;
+nnoremap v :
+nnoremap z !
+
+"nnoremap " W
+nnoremap Q X
+nnoremap J C
+nnoremap K V
+nnoremap X B
+nnoremap B N
+nnoremap M ?
+nnoremap W .
+nnoremap V /
+nnoremap Z §
+
