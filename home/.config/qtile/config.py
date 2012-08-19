@@ -62,6 +62,7 @@ keys = [
     Key([meta],         "semicolon", lazy.spawn("dmenu_run")),
     Key([meta],         "l",         lazy.spawn("xmessage Toto!")), #To test layouts. Note: if you see "Toto" in a source file, it's written by a french.
     Key([meta],         "F1",        lazy.spawn("setxkbmap us dvp -option ctrl:nocaps; xmodmap ~/.config/qtile/xmodmapdvp")),
+    Key([meta, alt],    "F1",        lazy.spawn("setxkbmap us dvp -option ctrl:nocaps; xmodmap ~/.config/qtile/xmodmapdvp_dead")),
     Key([meta],         "F2",        lazy.spawn("setxkbmap fr bepo -option ctrl:nocaps")),
     Key([meta],         "F3",        lazy.spawn("setxkbmap fr -option ctrl:nocaps")),
     Key([meta],         "F4",        lazy.spawn("setxkbmap us -option ctrl:nocaps")),
