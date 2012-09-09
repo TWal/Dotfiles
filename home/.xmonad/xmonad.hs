@@ -153,10 +153,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta,           xK_q           ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
 
     -- CycleWS setup
-    , ((alt,            xK_Right       ), nextWS)
-    , ((alt,            xK_Left        ), prevWS)
-    , ((alt  .|. shift, xK_Right       ), shiftToNext)
-    , ((alt  .|. shift, xK_Left        ), shiftToPrev)
+    , ((meta,           xK_Right       ), nextWS)
+    , ((meta,           xK_Left        ), prevWS)
+    , ((meta .|. shift, xK_Right       ), shiftToNext)
+    , ((meta .|. shift, xK_Left        ), shiftToPrev)
 
     -- KeyRemap setup
     , ((meta,           xK_F1          ), spawn "setxkbmap us dvp -option ctrl:nocaps && xmodmap ~/.xmonad/xmodmapdvp")
