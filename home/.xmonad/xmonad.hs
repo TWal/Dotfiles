@@ -102,7 +102,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta,           xK_b           ), refresh)
 
     -- Move focus to the next window
-    , ((meta,           xK_Tab         ), windows W.focusDown)
+    , ((alt,            xK_Tab         ), windows W.focusDown)
 
     -- Move focus to the next window (j)
     , ((meta,           xK_h           ), windows W.focusDown)
@@ -111,7 +111,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta,           xK_t           ), windows W.focusUp  )
 
     -- Move focus to the previous window
-    , ((meta .|. shift, xK_Tab         ), windows W.focusUp  )
+    , ((alt .|. shift,  xK_Tab         ), windows W.focusUp  )
 
     -- Move focus to the master window
     , ((meta,           xK_m           ), windows W.focusMaster  )
