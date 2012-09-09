@@ -46,7 +46,7 @@ endif
         " A nice colorscheme
         Bundle 'tomasr/molokai'
         " Add background to terminal vim
-        Bundle 'CSApprox'
+        Bundle 'godlygeek/csapprox'
     " }
 
     " Keystroke reducers {
