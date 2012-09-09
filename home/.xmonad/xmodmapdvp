@@ -1,0 +1,9 @@
+keysym e = e E eacute Eacute
+keysym u = u U ugrave Ugrave
+keysym a = a A agrave Agrave
+keysym j = j J egrave Egrave
+keysym c = c C ccedilla Ccedilla
+keysym k = k K ecircumflex Ecircumflex
+keysym q = q Q acircumflex Acircumflex
+
+keycode 108 = Mode_switch

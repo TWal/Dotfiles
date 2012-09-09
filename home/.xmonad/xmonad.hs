@@ -53,6 +53,10 @@ myBorderWidth   = 1
 --
 myModMask       = mod4Mask
 
+alt = mod1Mask
+shift = shiftMask
+meta = mod4Mask
+
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
 -- workspace name. The number of workspaces is determined by the length
@@ -63,7 +67,7 @@ myModMask       = mod4Mask
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
 --myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
-myWorkspaces    = ["IM", "Mail", "IRC", "Web"] ++ map show [1..9]
+myWorkspaces    = ["IM", "Mail", "IRC", "Web", "a", "o", "e", "u", "i", "d", "h", "t", "n", "s"]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -73,98 +77,101 @@ myFocusedBorderColor = "#ff0000"
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
 --
+-- Comments above each bind: what_does_the_bind (the_key_in_azerty)
 myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
-    -- launch a terminal
-    [ ((modm .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
+    -- launch a terminal              |
+    [ ((meta,           xK_Return      ), spawn $ XMonad.terminal conf)
 
-    -- launch dmenu
-    , ((modm,               xK_p     ), spawn "dmenu_run")
+    -- launch dmenu (a)
+    , ((meta,           xK_semicolon   ), spawn "dmenu_run")
 
     -- launch gmrun
-    , ((modm .|. shiftMask, xK_p     ), spawn "gmrun")
+    --, ((meta .|. shift, xK_p           ), spawn "gmrun")
 
-    -- close focused window
-    , ((modm .|. shiftMask, xK_c     ), kill)
+    -- close focused window (c)
+    , ((meta .|. shift, xK_j           ), kill)
 
      -- Rotate through the available layout algorithms
-    , ((modm,               xK_space ), sendMessage NextLayout)
+    , ((meta,           xK_space       ), sendMessage NextLayout)
 
     --  Reset the layouts on the current workspace to default
-    , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
+    , ((meta .|. shift, xK_space       ), setLayout $ XMonad.layoutHook conf)
 
-    -- Resize viewed windows to the correct size
-    , ((modm,               xK_n     ), refresh)
-
-    -- Move focus to the next window
-    , ((modm,               xK_Tab   ), windows W.focusDown)
+    -- Resize viewed windows to the correct size (n)
+    , ((meta,           xK_b           ), refresh)
 
     -- Move focus to the next window
-    , ((modm,               xK_j     ), windows W.focusDown)
+    , ((meta,           xK_Tab         ), windows W.focusDown)
+
+    -- Move focus to the next window (j)
+    , ((meta,           xK_h           ), windows W.focusDown)
+
+    -- Move focus to the previous window (k)
+    , ((meta,           xK_t           ), windows W.focusUp  )
 
     -- Move focus to the previous window
-    , ((modm,               xK_k     ), windows W.focusUp  )
+    , ((meta .|. shift, xK_Tab         ), windows W.focusUp  )
 
     -- Move focus to the master window
-    , ((modm,               xK_m     ), windows W.focusMaster  )
+    , ((meta,           xK_m           ), windows W.focusMaster  )
 
     -- Swap the focused window and the master window
-    , ((modm,               xK_Return), windows W.swapMaster)
+    , ((meta .|. shift, xK_Return      ), windows W.swapMaster)
 
-    -- Swap the focused window with the next window
-    , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
+    -- Swap the focused window with the next window (j)
+    , ((meta .|. shift, xK_h           ), windows W.swapDown  )
 
-    -- Swap the focused window with the previous window
-    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )
+    -- Swap the focused window with the previous window (k)
+    , ((meta .|. shift, xK_t           ), windows W.swapUp    )
 
-    -- Shrink the master area
-    , ((modm,               xK_h     ), sendMessage Shrink)
+    -- Shrink the master area (h)
+    , ((meta,           xK_d           ), sendMessage Shrink)
 
-    -- Expand the master area
-    , ((modm,               xK_l     ), sendMessage Expand)
+    -- Expand the master area (l)
+    , ((meta,           xK_n           ), sendMessage Expand)
 
-    -- Push window back into tiling
-    , ((modm,               xK_t     ), withFocused $ windows . W.sink)
+    -- Push window back into tiling (t)
+    , ((meta,           xK_y           ), withFocused $ windows . W.sink)
 
     -- Increment the number of windows in the master area
-    , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
+    --, ((meta,           xK_comma       ), sendMessage (IncMasterN 1))
 
     -- Deincrement the number of windows in the master area
-    , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
+    --, ((meta,           xK_period      ), sendMessage (IncMasterN (-1)))
 
     -- Toggle the status bar gap
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
     --
-    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+    -- , ((meta,        xK_b           ), sendMessage ToggleStruts)
 
-    -- Quit xmonad
-    , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
+    -- Quit xmonad (x)
+    , ((meta .|. shift, xK_q           ), io (exitWith ExitSuccess))
 
-    -- Restart xmonad
-    , ((modm              , xK_q     ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
+    -- Restart xmonad (x)
+    , ((meta,           xK_q           ), spawn "killall dzen2; xmonad --recompile && xmonad --restart")
 
     -- CycleWS setup
-    , ((modm              , xK_Right ), nextWS)
-    , ((modm              , xK_Left  ), prevWS)
-    , ((modm .|. shiftMask, xK_Right ), shiftToNext)
-    , ((modm .|. shiftMask, xK_Left  ), shiftToPrev)
+    , ((alt,            xK_Right       ), nextWS)
+    , ((alt,            xK_Left        ), prevWS)
+    , ((alt  .|. shift, xK_Right       ), shiftToNext)
+    , ((alt  .|. shift, xK_Left        ), shiftToPrev)
 
     -- KeyRemap setup
---    , ((modm .|. shiftMask, xK_F1    ), setKeyRemap emptyKeyRemap)
---    , ((modm .|. shiftMask, xK_F2    ), setKeyRemap dvorakAzertyRemap)
-    , ((modm .|. shiftMask, xK_F1    ), spawn "setxkbmap us dvp -option ctrl:nocaps")
-    , ((modm .|. shiftMask, xK_F2    ), spawn "setxkbmap fr bepo -option ctrl:nocaps")
-    , ((modm .|. shiftMask, xK_F3    ), spawn "setxkbmap fr -option ctrl:nocaps")
-    , ((modm .|. shiftMask, xK_F4    ), spawn "setxkbmap us -option ctrl:nocaps")
+    , ((meta,           xK_F1          ), spawn "setxkbmap us dvp -option ctrl:nocaps && xmodmap ~/.xmonad/xmodmapdvp")
+    , ((meta .|. shift, xK_F1          ), spawn "setxkbmap us dvp -option ctrl:nocaps && xmodmap ~/.xmonad/xmodmapdvp_dead")
+    , ((meta,           xK_F2          ), spawn "setxkbmap fr bepo -option ctrl:nocaps")
+    , ((meta,           xK_F3          ), spawn "setxkbmap fr -option ctrl:nocaps")
+    , ((meta,           xK_F4          ), spawn "setxkbmap us -option ctrl:nocaps")
 
     -- Lock
-    , ((modm .|. shiftMask, xK_BackSpace), spawn "alock -auth pam")
+    , ((meta,           xK_BackSpace   ), spawn "alock -auth pam")
 
     -- Volume control
-    , ((0,                  0x1008ff11  ), spawn "amixer -q sset Master 5%-")
-    , ((0,                  0x1008ff13  ), spawn "amixer -q sset Master 5%+")
-    , ((0,                  0x1008ff12  ), spawn "amixer -q sset Master toggle")
+    , ((0,              0x1008ff11     ), spawn "amixer -q sset Master 5%-")
+    , ((0,              0x1008ff13     ), spawn "amixer -q sset Master 5%+")
+    , ((0,              0x1008ff12     ), spawn "amixer -q sset Master toggle")
     ]
     ++
 
@@ -172,20 +179,18 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-[1..9], Switch to workspace N
     -- mod-shift-[1..9], Move client to workspace N
     --
-    [((m .|. modm, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
-        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
-    ++
+    [((m .|. alt, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_semicolon, xK_comma, xK_period, xK_p, xK_a, xK_o, xK_e, xK_u, xK_i, xK_d, xK_h, xK_t, xK_n, xK_s]
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shift)]]
+    -- ++
 
     --
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
-    [((m .|. modm, key), screenWorkspace sc >>= flip whenJust (windows . f))
-        | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-        , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
-
---    ++ buildKeyRemapBindings [dvorakAzertyRemap, emptyKeyRemap]
+    --[((m .|. meta, key), screenWorkspace sc >>= flip whenJust (windows . f))
+    --    | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
+    --    , (f, m) <- [(W.view, 0), (W.shift, shift)]]
 
 
 ------------------------------------------------------------------------
@@ -352,27 +357,6 @@ main = do
         logHook            = myLogHook dzenXMonadBar >> fadeInactiveLogHook 0xdddddddd,
         startupHook        = myStartupHook
     }
-
-{-
--- ############################# KEYREMAP AZERTY / DVORAK ################################
-dvorakAzertyRemap =
-  KeymapTable [((charToMask maskFrom, from), (charToMask maskTo, to)) |
-               (maskFrom, from, maskTo, to) <- (zip4 layoutUsShift layoutUsKey layoutDvorakShift layoutDvorakKey)]
-  where
-    layoutUs    = map (fromIntegral . fromEnum) "²&é\"'(-è_çà)=azertyuiop^$*qsdfghjklmùwxcvbn,;:!~1234567890°+AZERTYUIOP¨£µQSDFGHJKLM%WXCVBN?./§"  :: [KeySym]
-    layoutUsKey = map (fromIntegral . fromEnum) "²&é\"'(-è_çà)=azertyuiop^$*qsdfghjklmùwxcvbn,;:!²&é\"'(-è_çà)=azertyuiop^$*qsdfghjklmùwxcvbn,;:!"  :: [KeySym]
-    layoutUsShift = "0000000000000000000000000000000000000000000000011111111111111111111111111111111111111111111111"
-
-    layoutDvorak = map (fromIntegral . fromEnum) "$&[{}(=*)+]!#;,.pyfgcrl/@\\aoeuidhtns-'qjkxbmwvz~%7531902468`:<>PYFGCRL?^|AOEUIDHTNS_\"QJKXBMWVZ" :: [KeySym]
-
-    layoutDvorakShift = map getShift layoutDvorak
-    layoutDvorakKey   = map getKey layoutDvorak
-    getKey  char = let Just index = elemIndex char layoutUs
-                    in layoutUsKey !! index
-    getShift char = let Just index = elemIndex char layoutUs
-                     in layoutUsShift !! index
-    charToMask char = if [char] == "0" then 0 else shiftMask
--}
 
 -- modified version of XMonad.Layout.IM --
  
