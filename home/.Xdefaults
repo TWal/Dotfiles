@@ -1,4 +1,4 @@
-URxvt*font: xft:Monospace-11:antialias=false
+URxvt*font: xft:Source Code Pro-10
 URxvt*saveLines: 10000
 URxvt*scrollBar: true
 URxvt*scrollBar_right: true
@@ -8,8 +8,8 @@ URxvt*scrollstyle: plain
 URxvt*cursorColor: white
 URxvt*termName:xterm-256color
 URxvt*perl-ext-common: default,clipboard
-URxvt.keysym.Shift-Control-C: perl:clipboard:copy
-URxvt.keysym.Shift-Control-V: perl:clipboard:paste 
+URxvt.keysym.C-S-C: perl:clipboard:copy
+URxvt.keysym.C-S-V: perl:clipboard:paste
 
 URxvt*foreground: #f2f2f2
 URxvt*background: #333333
