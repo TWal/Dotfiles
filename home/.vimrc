@@ -47,6 +47,8 @@ endif
         Bundle 'tomasr/molokai'
         " Add background to terminal vim
         Bundle 'godlygeek/csapprox'
+        " Scala support
+        Bundle 'derekwyatt/vim-scala'
     " }
 
     " Keystroke reducers {
@@ -66,8 +68,6 @@ endif
         Bundle 'a.vim'
         " Move easily
         Bundle 'Lokaltog/vim-easymotion'
-        " Syntax checker
-        Bundle 'scrooloose/syntastic'
     " }
 
     filetype plugin indent on
