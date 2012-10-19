@@ -170,6 +170,38 @@ endif
         nnoremap H 0
         nnoremap S $
     " }
+
+    " Persistence (undo, swap, info, etc) {
+        " Thanks to http://stackoverflow.com/a/9528322
+        " Save backups to a less annoying place than the current directory.
+        if isdirectory($HOME . '/.vim/backup') == 0
+          :silent !mkdir -p ~/.vim/backup >/dev/null 2>&1
+        endif
+        set backupdir-=.
+        set backupdir+=.
+        set backupdir-=~/
+        set backupdir^=~/.vim/backup/
+        set backup
+
+        " Save swp files to a less annoying place than the current directory.
+        if isdirectory($HOME . '/.vim/swap') == 0
+          :silent !mkdir -p ~/.vim/swap >/dev/null 2>&1
+        endif
+        set directory=~/.vim/swap//
+        set directory+=.
+
+        " viminfo stores the the state of your previous editing session
+        set viminfo+=n~/.vim/viminfo
+
+        if exists("+undofile")
+          " undofile - This allows you to use undos after exiting and restarting
+          if isdirectory($HOME . '/.vim/undo') == 0
+            :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
+          endif
+          set undodir=~/.vim/undo//
+          set undofile
+        endif
+    " }
 " }
 
 " Plugin configuration {
