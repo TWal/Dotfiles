@@ -43,8 +43,10 @@ endif
         Bundle 'skammer/vim-css-color'
         "Color parenthesis differently
         Bundle 'kien/rainbow_parentheses.vim'
-        " A nice colorscheme
+        " Molokai colorscheme
         Bundle 'tomasr/molokai'
+        " Jellybeans colorscheme
+        Bundle 'nanotech/jellybeans.vim'
         " Add background to terminal vim
         Bundle 'godlygeek/csapprox'
         " Scala support
@@ -146,7 +148,8 @@ endif
         if $TERM == "xterm-256color" || $TERM == "xterm" || $TERM == "screen-256color"
             set t_Co=256 " Add 256-color support
         endif
-        colorscheme molokai " Load a nice colorscheme (desert is quite nice too)
+        "colorscheme molokai " Load a nice colorscheme (desert is quite nice too)
+        colorscheme jellybeans
     " }
 " }
 
@@ -178,27 +181,29 @@ endif
 " }
 
 " Programmer Dvorak utilities {
-    "Don't hold the shift key to press ':' (useful only when I'm using dvorak
-    "and I don't use the massive nnoremaping (below))
+    " Don't hold the shift key to press ':'
     nnoremap ; :
 
+    " HJKL => HTNS
+    noremap t j
+    noremap T J
+    noremap j t
+    noremap J T
+    noremap <C-w>t <C-w>j
+    noremap <C-w>j <C-w>t
 
-    " .vimrc.dvp is full of nnoremap to do dvorak -> azerty
-    if !exists("g:dvp")
-       let g:dvp = 0
-    endif
+    noremap n k
+    noremap N K
+    noremap k n
+    noremap K N
+    noremap <C-w>n <C-w>k
+    noremap <C-w>k <C-w>n
 
-    function! SetDvp ()
-       let g:dvp = 1
-       source ~/.vimrc.dvp
-    endfunction
-    
-    if g:dvp == 1
-       source ~/.vimrc.dvp
-    endif
+    noremap s l
+    noremap S L
+    noremap l s
+    noremap L S
 
-    command Dvp call SetDvp()
-    noremap <C-n><C-t><C-h> :Dvp<CR>
 " }
 
 
