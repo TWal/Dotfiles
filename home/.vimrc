@@ -151,6 +151,25 @@ endif
         "colorscheme molokai " Load a nice colorscheme (desert is quite nice too)
         colorscheme jellybeans
     " }
+
+    " Some mappings {
+        let mapleader = "-"
+        let maplocalleader = "\\"
+        " Move lines up / down (in my dvorak config, t is j (down), and n is k (up))
+        nnoremap <Leader>t ddp
+        nnoremap <Leader>n ddkP
+        " Delete a line in insert mode
+        inoremap <C-d> <Esc>ddi
+        " Uppercase a word
+        nnoremap <C-u> viwUw
+        inoremap <C-u> <Esc>viwUei
+        " Edit my .vimrc
+        nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
+        nnoremap <Leader>sv :source $MYVIMRC<CR>
+        " Move to the begin / end of a line (S is the equivalent of L in my configuration
+        nnoremap H 0
+        nnoremap S $
+    " }
 " }
 
 " Plugin configuration {
@@ -158,8 +177,8 @@ endif
         let g:neocomplcache_enable_at_startup = 1
 
         imap <expr> <Tab> neocomplcache#sources#snippets_complete#expandable() ? '<Plug>(neocomplcache_snippets_expand)' : pumvisible() ? '<C-n>' : '<Tab>' 
-        smap  <tab>  <right><plug>(neocomplcache_snippets_jump) 
-        inoremap <expr><c-e>     neocomplcache#complete_common_string()
+        smap <tab> <right><plug>(neocomplcache_snippets_jump)
+        inoremap <expr><c-e> neocomplcache#complete_common_string()
     " }
 
     " EasyMotion {
@@ -205,6 +224,4 @@ endif
     noremap L S
 
 " }
-
-
 
