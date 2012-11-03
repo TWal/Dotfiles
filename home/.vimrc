@@ -48,7 +48,9 @@ endif
         " Jellybeans colorscheme
         Bundle 'nanotech/jellybeans.vim'
         " Add background to terminal vim
-        Bundle 'godlygeek/csapprox'
+        if $TERM == "xterm-256color" || $TERM == "xterm" || $TERM == "screen-256color"
+            Bundle 'godlygeek/csapprox'
+        endif
         " Scala support
         Bundle 'derekwyatt/vim-scala'
     " }
@@ -56,7 +58,7 @@ endif
     " Keystroke reducers {
         " Autocompletion
         Bundle 'Shougo/neocomplcache'
-        Bundle 'Shougo/neocomplcache-snippets-complete'
+        Bundle 'Shougo/neosnippet'
         " Make repeat (.) work with plugins
         Bundle 'tpope/vim-repeat'
         " Surround things with html tags, (), {}, etc
