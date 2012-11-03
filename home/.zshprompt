@@ -1,1 +1,84 @@
-/home/twal/.zshprompt
+autoload -U colors
+colors
+setopt prompt_subst
+
+function prompt() {
+    if [[ "root" == `whoami` ]]; then
+        local bracketColor='$fg[red]'
+    else
+        local bracketColor='$fg[green]'
+    fi
+
+    function _vcs() {
+        local bracketColor=$1
+        if [[ -n `git branch 2>/dev/null` ]]; then
+            local branch="$(git branch | sed -n '/^\*/s/^\* //p;')"
+            local gitStat="$(git diff --shortstat | sed -r 's/[^0-9]+/ /g')"
+            local gitStatChanged="$(echo $gitStat | cut -d' ' -f2)"
+            local gitStatPlus="$(echo $gitStat | cut -d' ' -f3)"
+            local gitStatMinus="$(echo $gitStat | cut -d' ' -f4)"
+            local untracked="$(git status --porcelain | grep "^??" | wc -l)"
+
+            echo -n "%{$bracketColor%}[%{$fg[red]%}± %{$fg[green]%}$branch%{$reset_color%}"
+            if [[ "$gitStatPlus $gitStatMinus $gitStatChanged" != "  " ]]; then
+                echo -n " (%{$fg[green]%}+$gitStatPlus%{$reset_color%}/%{$fg[red]%}-$gitStatMinus%{$reset_color%}, %{$fg[yellow]%}$gitStatChanged%{$reset_color%})"
+            fi
+            if [[ "$untracked" != "0" ]]; then
+                echo -n " %{$fg[magenta]%}$untracked"
+            fi
+            echo -n "%{$bracketColor%}]"
+        fi
+        #TODO: hg, svn, and so on
+    }
+
+    function _jobs() {
+        local bracketColor=$1
+
+        local running="$(jobs -r | wc -l)"
+        local stopped="$(jobs -s | wc -l)"
+        local detach="$(tmux ls 2>/dev/null | grep -v "(attached)$" | wc -l)"
+        local users="$(who | wc -l)"
+
+        if [[ "${running}${stopped}${detach}${users}" != "0001" ]]; then
+            echo -n "%{$bracketColor%}[%{$fg[yellow]%}"
+            if [[ $running != "0" ]]; then
+                echo -n "${running}&"
+            fi
+            if [[ $stopped != "0" ]]; then
+                echo -n "${stopped}z"
+            fi
+            if [[ $detach != "0" ]]; then
+                echo -n "${detach}d"
+            fi
+            if [[ $users != "1" ]]; then
+                echo -n "${users}u"
+            fi
+            echo -n "%{$bracketColor%}]"
+        fi
+    }
+
+    local basePrompt="%{$bracketColor%}[%{\$fg[red]%}%n%{\$reset_color%}@%{\$fg[magenta]%}%m%{\$reset_color%}:%{\$fg[blue]%}%~%{$bracketColor%}]%{\$reset_color%}%# "
+    case "$1" in
+        "heavy")
+            PROMPT=$basePrompt
+            RPROMPT="\$(_jobs $bracketColor)\$(_vcs $bracketColor)%{$bracketColor%}[%{\$fg[cyan]%}%T%{$bracketColor%}]%{\$reset_color%}"
+            ;;
+        "normal")
+            PROMPT=$basePrompt
+            RPROMPT=''
+            ;;
+        "light")
+            PROMPT='%# '
+            RPROMPT=''
+            ;;
+    esac
+
+    function _prompt() {
+        compadd light normal heavy
+    }
+
+    compdef _prompt prompt
+}
+
+prompt heavy
+
