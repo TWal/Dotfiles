@@ -1,4 +1,0 @@
-keycode 34 = dead_acute
-keycode 35 = dead_grave
-keycode 48 = dead_circumflex dead_diaeresis
-keycode 51 = dead_cedilla

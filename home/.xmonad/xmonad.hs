@@ -159,8 +159,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta .|. shift, xK_Left        ), shiftToPrev)
 
     -- KeyRemap setup
-    , ((meta,           xK_F1          ), spawn "setxkbmap us dvp -option ctrl:nocaps && xmodmap ~/.xmonad/xmodmapdvp")
-    , ((meta .|. shift, xK_F1          ), spawn "setxkbmap us dvp -option ctrl:nocaps && xmodmap ~/.xmonad/xmodmapdvp_dead")
+    , ((meta,           xK_F1          ), spawn "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap")
     , ((meta,           xK_F2          ), spawn "setxkbmap fr bepo -option ctrl:nocaps")
     , ((meta,           xK_F3          ), spawn "setxkbmap fr -option ctrl:nocaps")
     , ((meta,           xK_F4          ), spawn "setxkbmap us -option ctrl:nocaps")
