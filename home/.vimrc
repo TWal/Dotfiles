@@ -72,6 +72,8 @@ endif
         Bundle 'a.vim'
         " Move easily
         Bundle 'Lokaltog/vim-easymotion'
+        " Show which lines have been modified
+        Bundle 'airblade/vim-gitgutter'
     " }
 
     filetype plugin indent on
@@ -152,6 +154,9 @@ endif
         endif
         "colorscheme molokai " Load a nice colorscheme (desert is quite nice too)
         colorscheme jellybeans
+        " Show trailing whitepace and spaces before a tab:
+        :highlight ExtraWhitespace ctermbg=red guibg=red
+        :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
     " }
 
     " Some mappings {
@@ -168,9 +173,6 @@ endif
         " Edit my .vimrc
         nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
         nnoremap <Leader>sv :source $MYVIMRC<CR>
-        " Move to the begin / end of a line (S is the equivalent of L in my configuration
-        nnoremap H 0
-        nnoremap S $
     " }
 
     " Persistence (undo, swap, info, etc) {

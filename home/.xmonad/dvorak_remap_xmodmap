@@ -1,9 +1,14 @@
 keycode 24 = semicolon colon dead_diaeresis
 keycode 25 = comma less dead_circumflex
-keycode 26 = period greater dead_grave 
+keycode 26 = period greater dead_grave
 keycode 27 = p P dead_acute
 keycode 52 = apostrophe quotedbl
 
-keysym c = c C ccedilla Ccedilla
+keysym g = g G eacute Eacute
+keysym c = c C egrave Egrave
+keysym r = r R agrave Agrave
+keysym l = l L ecircumflex Ecircumflex
+keysym h = h H ugrave Ugrave
+keysym t = t T ccedilla Ccedilla
 
 keycode 108 = Mode_switch

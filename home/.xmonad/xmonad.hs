@@ -168,6 +168,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta,           xK_BackSpace   ), spawn "alock -auth pam")
 
     -- Volume control
+    , ((0,              0x1008ff13     ), spawn "amixer -q sset Master 5%+")
     , ((0,              0x1008ff11     ), spawn "amixer -q sset Master 5%-")
     , ((0,              0x1008ff13     ), spawn "amixer -q sset Master 5%+")
     , ((0,              0x1008ff12     ), spawn "amixer -q sset Master toggle")
@@ -226,7 +227,7 @@ myLayout = onWorkspaces ["IM"] imLayout $ customLayouts
   where
      imLayout = avoidStruts $ withIMs (1%7) [pidginRoster, skypeRoster] Grid
      pidginRoster = And (ClassName "Pidgin") (Role "buddy_list")
-     skypeRoster = Title "theophile.wallez - Skype™ (Beta)"
+     skypeRoster = And (ClassName "Skype") (Not (Role "ConversationsWindow"))
 
      customLayouts = avoidStruts $ tiled ||| Mirror tiled ||| Full ||| Grid
 
@@ -332,7 +333,7 @@ main = do
     conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/misc/.conkyrc"
     conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/graphs/.conkyrc"
     conkyRing <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/rings/.conkyrc"
-    spawnPipe "setxkbmap us dvp -option ctrl:nocaps"
+    spawnPipe "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap"
     spawnPipe "/home/twal/.xmonad/start.sh redshift -l 43.63:1.37"
     spawnPipe "/home/twal/.xmonad/start.sh urxvtd"
     xmonad defaultConfig {
@@ -358,30 +359,30 @@ main = do
     }
 
 -- modified version of XMonad.Layout.IM --
- 
+
 -- | Data type for LayoutModifier which converts given layout to IM-layout
 -- (with dedicated space for the roster and original layout for chat windows)
 data AddRosters a = AddRosters Rational [Property] deriving (Read, Show)
- 
+
 instance LayoutModifier AddRosters Window where
   modifyLayout (AddRosters ratio props) = applyIMs ratio props
   modifierDescription _                = "IMs"
- 
+
 -- | Modifier which converts given layout to IMs-layout (with dedicated
 -- space for rosters and original layout for chat windows)
 withIMs :: LayoutClass l a => Rational -> [Property] -> l a -> ModifiedLayout AddRosters l a
 withIMs ratio props = ModifiedLayout $ AddRosters ratio props
- 
+
 -- | IM layout modifier applied to the Grid layout
 gridIMs :: Rational -> [Property] -> ModifiedLayout AddRosters Grid a
 gridIMs ratio props = withIMs ratio props Grid
- 
+
 hasAnyProperty :: [Property] -> Window -> X Bool
 hasAnyProperty [] _ = return False
 hasAnyProperty (p:ps) w = do
     b <- hasProperty p w
     if b then return True else hasAnyProperty ps w
- 
+
 -- | Internal function for placing the rosters specified by
 -- the properties and running original layout for all chat windows
 applyIMs :: (LayoutClass l Window) =>

@@ -22,3 +22,7 @@ cowsay -f `ls /usr/share/cowsay-3.03/cows | shuf -n1 | cut -d'.' -f1` "`fortune 
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+
+if [ ! ${TMUX:+$TMUX} ]; then;
+    tmux && exit
+fi
