@@ -27,8 +27,9 @@ endif
     " Browsers {
         " Tree file browser
         Bundle 'scrooloose/nerdtree'
+        " No per-tab nerdtree
+        Bundle 'jistr/vim-nerdtree-tabs'
         " Class browser (java, c, c++, python, ...)
-        "Bundle 'taglist.vim'
         Bundle 'majutsushi/tagbar'
     " }
 
@@ -39,30 +40,27 @@ endif
         Bundle 'groenewege/vim-less'
          "Syntax for CSS3
         Bundle 'hail2u/vim-css3-syntax'
-        " CSS color helper
-        Bundle 'skammer/vim-css-color'
         "Color parenthesis differently
         Bundle 'kien/rainbow_parentheses.vim'
         " Molokai colorscheme
         Bundle 'tomasr/molokai'
         " Jellybeans colorscheme
         Bundle 'nanotech/jellybeans.vim'
+        " Scala support
+        Bundle 'derekwyatt/vim-scala'
         " Add background to terminal vim
         if $TERM == "xterm-256color" || $TERM == "xterm" || $TERM == "screen-256color"
             Bundle 'godlygeek/csapprox'
         endif
-        " Scala support
-        Bundle 'derekwyatt/vim-scala'
     " }
 
     " Keystroke reducers {
         " Autocompletion
-        Bundle 'Shougo/neocomplcache'
-        Bundle 'Shougo/neosnippet'
-        " Make repeat (.) work with plugins
-        Bundle 'tpope/vim-repeat'
-        " Surround things with html tags, (), {}, etc
-        Bundle 'tpope/vim-surround'
+        Bundle 'Valloric/YouCompleteMe'
+        " Snippets
+        Bundle 'SirVer/ultisnips'
+        " Supertab (make YCM and Ultisnips work together)
+        Bundle 'ervandew/supertab'
         " Comment easily
         Bundle 'scrooloose/nerdcommenter'
     " }
@@ -74,6 +72,10 @@ endif
         Bundle 'Lokaltog/vim-easymotion'
         " Show which lines have been modified
         Bundle 'airblade/vim-gitgutter'
+        " Beat sublime text users best argument
+        Bundle 'terryma/vim-multiple-cursors'
+        " Syntax checker
+        Bundle 'scrooloose/syntastic'
     " }
 
     filetype plugin indent on
@@ -89,7 +91,6 @@ endif
         set history=500 " Keep 500 lines of history
         set showmatch " Show matching brackets.
         set autowrite " Automatically save before commands like :next and :make
-        set mousefocus
     " }
 
     " Search {
@@ -121,7 +122,7 @@ endif
         "Status line
         set statusline=%f "File name
         set statusline+=%m "Modified flag
-        set statusline+=%r "Readorny flag
+        set statusline+=%r "Readonly flag
         set statusline+=%h "Help buffer flag
         set statusline+=%w "Preview window flag
         set statusline+=\ %y "Space + file type
@@ -135,6 +136,9 @@ endif
         set statusline+=\ %P "Percent of the file
         set statusline+=\  "Final space
         set laststatus=2
+        set fcs=vert:│ "Solid line for vsplit
+        set wildmenu
+        set wildmode=list:longest,full
     " }
 
     " Tabs {
@@ -160,19 +164,15 @@ endif
     " }
 
     " Some mappings {
+        " Leader
         let mapleader = "-"
         let maplocalleader = "\\"
-        " Move lines up / down (in my dvorak config, t is j (down), and n is k (up))
-        nnoremap <Leader>t ddp
-        nnoremap <Leader>n ddkP
-        " Delete a line in insert mode
-        inoremap <C-d> <Esc>ddi
-        " Uppercase a word
-        nnoremap <C-u> viwUw
-        inoremap <C-u> <Esc>viwUei
-        " Edit my .vimrc
-        nnoremap <Leader>ev :vsplit $MYVIMRC<CR>
-        nnoremap <Leader>sv :source $MYVIMRC<CR>
+        " Keep selection when indenting
+        xnoremap < <gv
+        xnoremap > >gv
+        " Swap 0 and ^
+        noremap 0 ^
+        noremap ^ 0
     " }
 
     " Persistence (undo, swap, info, etc) {
@@ -209,12 +209,11 @@ endif
 " }
 
 " Plugin configuration {
-    " NeoComplCache & SuperTab {
-        let g:neocomplcache_enable_at_startup = 1
-
-        imap <expr> <Tab> neocomplcache#sources#snippets_complete#expandable() ? '<Plug>(neocomplcache_snippets_expand)' : pumvisible() ? '<C-n>' : '<Tab>' 
-        smap <tab> <right><plug>(neocomplcache_snippets_jump)
-        inoremap <expr><c-e> neocomplcache#complete_common_string()
+    " YouCompleteMe, Ultisnips and Supertab {
+        let g:ycm_key_list_select_completion = ['<C-TAB>', '<Down>']
+        let g:ycm_key_list_previous_completion = ['<C-S-TAB>', '<Up>']
+        let g:SuperTabDefaultCompletionType = '<C-Tab>'
+        let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
     " }
 
     " EasyMotion {
@@ -231,9 +230,15 @@ endif
         " au Syntax * RainbowParenthesesLoadChevrons
     " }
     " NERDTree {
-        noremap <F12> :NERDTreeToggle<CR>
+        noremap <F12> :NERDTreeTabsToggle<CR>
+    " }
+
+    " Multiple Cursors {
+        let g:multi_cursor_exit_from_visual_mode = 0
+        let g:multi_cursor_exit_from_insert_mode = 0
     " }
 " }
+
 
 " Programmer Dvorak utilities {
     " Don't hold the shift key to press ':'
@@ -241,23 +246,23 @@ endif
 
     " HJKL => HTNS
     noremap t j
-    noremap T J
+    "noremap T J
     noremap j t
-    noremap J T
+    "noremap J T
     noremap <C-w>t <C-w>j
     noremap <C-w>j <C-w>t
 
     noremap n k
-    noremap N K
+    "noremap N K
     noremap k n
-    noremap K N
+    "noremap K N
     noremap <C-w>n <C-w>k
     noremap <C-w>k <C-w>n
 
     noremap s l
-    noremap S L
+    "noremap S L
     noremap l s
-    noremap L S
+    "noremap L S
 
 " }
 

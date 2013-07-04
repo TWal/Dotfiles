@@ -330,12 +330,13 @@ main = do
     let dzenWidth = 1920 + 1680
     dzenXMonadBar <- spawnPipe $ "dzen2 -x '0' -y '0' -h '24' -w '" ++ show dzenSplit ++ "' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E'"
     dzenConkyBar <- spawnPipe $ "conky -c /home/twal/.xmonad/.conky_dzen | dzen2 -x '" ++ show dzenSplit ++ "' -w '" ++ show (dzenWidth - dzenSplit) ++ "' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
-    conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/misc/.conkyrc"
-    conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/graphs/.conkyrc"
-    conkyRing <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/rings/.conkyrc"
+    --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/misc/.conkyrc"
+    --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/graphs/.conkyrc"
+    --conkyRing <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/rings/.conkyrc"
     spawnPipe "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap"
     spawnPipe "/home/twal/.xmonad/start.sh redshift -l 43.63:1.37"
     spawnPipe "/home/twal/.xmonad/start.sh urxvtd"
+    spawnPipe "xrandr --output DP-0 --left-of DP-1"
     xmonad defaultConfig {
       -- simple stuff
         terminal           = myTerminal,
