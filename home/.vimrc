@@ -73,7 +73,7 @@ endif
         " Show which lines have been modified
         Bundle 'airblade/vim-gitgutter'
         " Beat sublime text users best argument
-        Bundle 'terryma/vim-multiple-cursors'
+         "Bundle 'terryma/vim-multiple-cursors'
         " Syntax checker
         Bundle 'scrooloose/syntastic'
     " }
@@ -91,6 +91,7 @@ endif
         set history=500 " Keep 500 lines of history
         set showmatch " Show matching brackets.
         set autowrite " Automatically save before commands like :next and :make
+        set ttimeoutlen=100
     " }
 
     " Search {
@@ -108,17 +109,17 @@ endif
         set cursorline " Highlight where the cursor is
         set mouse=a " Enable mouse usage (all modes)
 
-        set relativenumber " Enable relative numbers
+        "Set relative number, and absolute number where the 0 is
+        set number
+        set relativenumber
         set numberwidth=4 " 4 width numbers
-        "Relative number in command mode, absolute number in insert mode
-        autocmd InsertEnter * :set number
+
+        " No relative number in insert mode
+        autocmd InsertEnter * :set norelativenumber
         autocmd InsertLeave * :set relativenumber
 
-        "Disable arrows. hjkl are a lot faster.
-        nnoremap <Up> <nop>
-        nnoremap <Down> <nop>
-        nnoremap <Left> <nop>
-        nnoremap <Right> <nop>
+        set lazyredraw " Be lazy
+
         "Status line
         set statusline=%f "File name
         set statusline+=%m "Modified flag
@@ -173,6 +174,20 @@ endif
         " Swap 0 and ^
         noremap 0 ^
         noremap ^ 0
+        " Some mappings like ZZ, ZQ
+        nnoremap ZW :w<cr>
+        nnoremap ZAW :wa<cr>
+        nnoremap ZAQ :qa!<cr>
+        nnoremap ZAZ :xa<cr>
+        nnoremap ZT :tabe 
+        " Make Y behave like C and D
+        nnoremap Y y$
+
+        " Disable arrows. hjkl are a lot faster.
+        nnoremap <Up> <nop>
+        nnoremap <Down> <nop>
+        nnoremap <Left> <nop>
+        nnoremap <Right> <nop>
     " }
 
     " Persistence (undo, swap, info, etc) {
@@ -202,6 +217,7 @@ endif
           if isdirectory($HOME . '/.vim/undo') == 0
             :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
           endif
+          set undodir=~/.vim/undo//
           set undodir=~/.vim/undo//
           set undofile
         endif
@@ -242,13 +258,14 @@ endif
 
 " Programmer Dvorak utilities {
     " Don't hold the shift key to press ':'
-    nnoremap ; :
+    "nnoremap ; :
+    "nnoremap : ;
 
     " HJKL => HTNS
     noremap t j
-    "noremap T J
+    noremap T J
     noremap j t
-    "noremap J T
+    noremap J T
     noremap <C-w>t <C-w>j
     noremap <C-w>j <C-w>t
 

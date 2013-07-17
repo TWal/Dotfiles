@@ -159,10 +159,10 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta .|. shift, xK_Left        ), shiftToPrev)
 
     -- KeyRemap setup
-    , ((meta,           xK_F1          ), spawn "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap")
-    , ((meta,           xK_F2          ), spawn "setxkbmap fr bepo -option ctrl:nocaps")
-    , ((meta,           xK_F3          ), spawn "setxkbmap fr -option ctrl:nocaps")
-    , ((meta,           xK_F4          ), spawn "setxkbmap us -option ctrl:nocaps")
+    , ((meta,           xK_F1          ), spawn "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap; killall xcape; xcape -e 'Control_L=Escape'")
+    , ((meta,           xK_F2          ), spawn "setxkbmap fr bepo -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
+    , ((meta,           xK_F3          ), spawn "setxkbmap fr -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
+    , ((meta,           xK_F4          ), spawn "setxkbmap us -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
 
     -- Lock
     , ((meta,           xK_BackSpace   ), spawn "alock -auth pam")
@@ -333,10 +333,12 @@ main = do
     --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/misc/.conkyrc"
     --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/graphs/.conkyrc"
     --conkyRing <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/rings/.conkyrc"
-    spawnPipe "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap"
+    spawnPipe "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap; killall xcape; xcape -e 'Control_L=Escape'"
     spawnPipe "/home/twal/.xmonad/start.sh redshift -l 43.63:1.37"
     spawnPipe "/home/twal/.xmonad/start.sh urxvtd"
     spawnPipe "xrandr --output DP-0 --left-of DP-1"
+    --spawnPipe "killall xcape"
+    --spawnPipe "/bin/sh -c xcape -e 'Control_L=Escape'"
     xmonad defaultConfig {
       -- simple stuff
         terminal           = myTerminal,
