@@ -1,12 +1,10 @@
-autoload -U colors
-colors
 setopt prompt_subst
 
 function prompt() {
     if [[ "root" == `whoami` ]]; then
-        local bracketColor='$fg[red]'
+        local bracketColor='red'
     else
-        local bracketColor='$fg[green]'
+        local bracketColor='green'
     fi
 
     function _vcs() {
@@ -19,14 +17,14 @@ function prompt() {
             local gitStatMinus="$(echo $gitStat | cut -d' ' -f4)"
             local untracked="$(git status --porcelain | grep "^??" | wc -l)"
 
-            echo -n "%{$bracketColor%}[%{$fg[red]%}± %{$fg[green]%}$branch%{$reset_color%}"
+            echo -n "%F{$bracketColor}[%F{red}± %F{green}$branch%F{reset}"
             if [[ "$gitStatPlus $gitStatMinus $gitStatChanged" != "  " ]]; then
-                echo -n " (%{$fg[green]%}+$gitStatPlus%{$reset_color%}/%{$fg[red]%}-$gitStatMinus%{$reset_color%}, %{$fg[yellow]%}$gitStatChanged%{$reset_color%})"
+                echo -n " (%F{green}+$gitStatPlus%F{reset}/%F{red}-$gitStatMinus%F{reset}, %F{yellow}$gitStatChanged%F{reset})"
             fi
             if [[ "$untracked" != "0" ]]; then
-                echo -n " %{$fg[magenta]%}$untracked"
+                echo -n " %F{magenta}$untracked"
             fi
-            echo -n "%{$bracketColor%}]"
+            echo -n "%F{$bracketColor}]"
         fi
         #TODO: hg, svn, and so on
     }
@@ -40,7 +38,7 @@ function prompt() {
         local users="$(who | wc -l)"
 
         if [[ "${running}${stopped}${detach}${users}" != "0001" ]]; then
-            echo -n "%{$bracketColor%}[%{$fg[yellow]%}"
+            echo -n "%F{$bracketColor}[%F{yellow}"
             if [[ $running != "0" ]]; then
                 echo -n "${running}&"
             fi
@@ -53,15 +51,15 @@ function prompt() {
             if [[ $users != "1" ]]; then
                 echo -n "${users}u"
             fi
-            echo -n "%{$bracketColor%}]"
+            echo -n "%F{$bracketColor}]"
         fi
     }
 
-    local basePrompt="%{$bracketColor%}[%{\$fg[red]%}%n%{\$reset_color%}@%{\$fg[magenta]%}%m%{\$reset_color%}:%{\$fg[blue]%}%~%{$bracketColor%}]%{\$reset_color%}%# "
+    local basePrompt="%F{$bracketColor}[%F{red}%n%F{reset}@%F{magenta}%m%F{reset}:%F{blue}%~%F{$bracketColor}]%F{reset}%# "
     case "$1" in
         "heavy")
             PROMPT=$basePrompt
-            RPROMPT="\$(_jobs $bracketColor)\$(_vcs $bracketColor)%{$bracketColor%}[%{\$fg[cyan]%}%T%{$bracketColor%}]%{\$reset_color%}"
+            RPROMPT="\$(_jobs $bracketColor)\$(_vcs $bracketColor)%F{$bracketColor}[%F{cyan}%T%F{$bracketColor}]%F{reset}"
             ;;
         "normal")
             PROMPT=$basePrompt

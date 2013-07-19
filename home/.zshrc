@@ -18,7 +18,9 @@ setopt hist_ignore_all_dups
 source ~/.zshprompt
 
 #Display a fortune
-cowsay -f `ls /usr/share/cowsay-3.03/cows | shuf -n1 | cut -d'.' -f1` "`fortune -s`"
+if [ command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 ]; then
+    cowsay -f `ls /usr/share/cowsay*/cows | shuf -n1 | cut -d'.' -f1` "`fortune -s`"
+fi
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
