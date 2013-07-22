@@ -18,13 +18,32 @@ setopt hist_ignore_all_dups
 source ~/.zshprompt
 
 #Display a fortune
-if [ command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 ]; then
-    cowsay -f `ls /usr/share/cowsay*/cows | shuf -n1 | cut -d'.' -f1` "`fortune -s`"
-fi
+command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 && { cowsay -f `ls /usr/share/cowsay*/cows | shuf -n1 | cut -d'.' -f1` "`fortune -s`"}
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 
 if [ ! ${TMUX:+$TMUX} ]; then;
-    tmux && exit
+    exec tmux
 fi
+
+set -o vi
+bindkey '^p' up-line-or-history
+bindkey '^n' down-line-or-history
+
+tmux-change-session() {
+    if [ ${TMUX:+$TMUX} ]; then;
+        session=$(tmux list-panes -F '#{session_name}')
+        tmux choose-session
+        for i in `seq 1 60`; do
+            if [ -z "$(tmux ls | grep "^$session.*(attached)$")" ]; then
+                tmux kill-session -t $session
+                break
+            fi
+            sleep 1
+        done
+        unset $session
+    else
+        echo "You need to be in a tmux session"
+    fi
+}

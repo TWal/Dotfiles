@@ -29,7 +29,7 @@ function prompt() {
         #TODO: hg, svn, and so on
     }
 
-    function _jobs() {
+    function _hidden() {
         local bracketColor=$1
 
         local running="$(jobs -r | wc -l)"
@@ -59,7 +59,7 @@ function prompt() {
     case "$1" in
         "heavy")
             PROMPT=$basePrompt
-            RPROMPT="\$(_jobs $bracketColor)\$(_vcs $bracketColor)%F{$bracketColor}[%F{cyan}%T%F{$bracketColor}]%F{reset}"
+            RPROMPT="\$(_hidden $bracketColor)\$(_vcs $bracketColor)%F{$bracketColor}[%F{cyan}%T%F{$bracketColor}]%F{reset}"
             ;;
         "normal")
             PROMPT=$basePrompt

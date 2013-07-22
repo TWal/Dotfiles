@@ -262,23 +262,23 @@ endif
     "nnoremap : ;
 
     " HJKL => HTNS
-    noremap t j
-    noremap T J
-    noremap j t
-    noremap J T
-    noremap <C-w>t <C-w>j
-    noremap <C-w>j <C-w>t
+    "noremap t j
+    "noremap T J
+    "noremap j t
+    "noremap J T
+    "noremap <C-w>t <C-w>j
+    "noremap <C-w>j <C-w>t
 
-    noremap n k
+    "noremap n k
     "noremap N K
-    noremap k n
+    "noremap k n
     "noremap K N
-    noremap <C-w>n <C-w>k
-    noremap <C-w>k <C-w>n
+    "noremap <C-w>n <C-w>k
+    "noremap <C-w>k <C-w>n
 
-    noremap s l
+    "noremap s l
     "noremap S L
-    noremap l s
+    "noremap l s
     "noremap L S
 
 " }
