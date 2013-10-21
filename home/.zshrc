@@ -13,12 +13,13 @@ HISTSIZE=1000
 SAVEHIST=1000
 EDITOR=vim
 setopt hist_ignore_all_dups
+PATH=$PATH:~/.cabal/bin
 
 #Load my prompt
 source ~/.zshprompt
 
 #Display a fortune
-command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 && { cowsay -f `ls /usr/share/cowsay*/cows | shuf -n1 | cut -d'.' -f1` "`fortune -s`"}
+command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 && { cowsay -f `ls /usr/share/cows | shuf -n1 | cut -d'.' -f1` "`fortune -s`"}
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
@@ -46,4 +47,8 @@ tmux-change-session() {
     else
         echo "You need to be in a tmux session"
     fi
+}
+
+use_ccache() {
+    export PATH=/usr/lib64/ccache/bin:$PATH
 }

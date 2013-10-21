@@ -31,6 +31,8 @@ import Data.Ratio ((%))
 import XMonad.Layout.LayoutModifier
 import XMonad.Util.WindowProperties
 import Control.Monad
+import DBus.Client
+import System.Taffybar.XMonadLog (dbusLog)
 
 
 -- The preferred terminal program, which is used in a binding below and by
@@ -165,7 +167,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta,           xK_F4          ), spawn "setxkbmap us -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
 
     -- Lock
-    , ((meta,           xK_BackSpace   ), spawn "alock -auth pam")
+    , ((meta,           xK_BackSpace   ), spawn "xset +dpms && xset dpms 10 10 10 && alock -auth pam && xset dpms 900 900 900")
 
     -- Volume control
     , ((0,              0x1008ff13     ), spawn "amixer -q sset Master 5%+")
@@ -337,8 +339,10 @@ main = do
     spawnPipe "/home/twal/.xmonad/start.sh redshift -l 43.63:1.37"
     spawnPipe "/home/twal/.xmonad/start.sh urxvtd"
     spawnPipe "xrandr --output DP-0 --left-of DP-1"
-    --spawnPipe "killall xcape"
-    --spawnPipe "/bin/sh -c xcape -e 'Control_L=Escape'"
+
+    --client <- connectSession
+    --let pp = defaultPP
+    --taffybar <- spawnPipe "~/.cabal/bin/taffybar"
     xmonad defaultConfig {
       -- simple stuff
         terminal           = myTerminal,
@@ -357,6 +361,7 @@ main = do
         layoutHook         = myLayout,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
+        --logHook            = dbusLog client,
         logHook            = myLogHook dzenXMonadBar >> fadeInactiveLogHook 0xdddddddd,
         startupHook        = myStartupHook
     }

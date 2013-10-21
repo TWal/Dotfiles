@@ -57,12 +57,13 @@ endif
     " Keystroke reducers {
         " Autocompletion
         Bundle 'Valloric/YouCompleteMe'
+        Bundle 'Shougo/neocomplete.vim'
         " Snippets
         Bundle 'SirVer/ultisnips'
-        " Supertab (make YCM and Ultisnips work together)
-        Bundle 'ervandew/supertab'
         " Comment easily
         Bundle 'scrooloose/nerdcommenter'
+        " Autocompletion for haskell
+        Bundle 'ujihisa/neco-ghc'
     " }
 
     " Misc {
@@ -73,7 +74,7 @@ endif
         " Show which lines have been modified
         Bundle 'airblade/vim-gitgutter'
         " Beat sublime text users best argument
-         "Bundle 'terryma/vim-multiple-cursors'
+        " Bundle 'terryma/vim-multiple-cursors'
         " Syntax checker
         Bundle 'scrooloose/syntastic'
     " }
@@ -184,10 +185,18 @@ endif
         nnoremap Y y$
 
         " Disable arrows. hjkl are a lot faster.
-        nnoremap <Up> <nop>
-        nnoremap <Down> <nop>
-        nnoremap <Left> <nop>
-        nnoremap <Right> <nop>
+        noremap <Up> <nop>
+        noremap <Down> <nop>
+        noremap <Left> <nop>
+        noremap <Right> <nop>
+
+        " Move in tabs
+        noremap <C-p> gT
+        noremap <C-n> gt
+
+        " Center line when pressing n or N
+        nnoremap n nzz
+        nnoremap N Nzz
     " }
 
     " Persistence (undo, swap, info, etc) {
@@ -225,11 +234,17 @@ endif
 " }
 
 " Plugin configuration {
-    " YouCompleteMe, Ultisnips and Supertab {
-        let g:ycm_key_list_select_completion = ['<C-TAB>', '<Down>']
-        let g:ycm_key_list_previous_completion = ['<C-S-TAB>', '<Up>']
-        let g:SuperTabDefaultCompletionType = '<C-Tab>'
+    " YouCompleteMe, Ultisnips, neco-ghc {
         let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+        let g:ycm_filetype_whitelist = {'cpp' : 1, 'python' : 1, 'c' : 1}
+        let g:UltiSnipsExpandTrigger = '<Leader>s'
+        let g:necoghc_enable_detailed_browse = 1
+        let g:neocomplete#enable_at_startup = 1
+        let g:neocomplete#enable_smart_case = 1
+        let g:neocomplete#lock_buffer_name_pattern = "\\v(\\.cpp|\\.c|\\.py)$"
+        au BufRead,BufNewFile *.hs setlocal omnifunc=necoghc#omnifunc
+        inoremap <expr><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+        inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
     " }
 
     " EasyMotion {
