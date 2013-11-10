@@ -181,8 +181,6 @@ endif
         nnoremap ZAQ :qa!<cr>
         nnoremap ZAZ :xa<cr>
         nnoremap ZT :tabe 
-        " Make Y behave like C and D
-        nnoremap Y y$
 
         " Disable arrows. hjkl are a lot faster.
         noremap <Up> <nop>
@@ -195,8 +193,17 @@ endif
         noremap <C-n> gt
 
         " Center line when pressing n or N
-        nnoremap n nzz
-        nnoremap N Nzz
+        "nnoremap n nzz
+        "nnoremap N Nzz
+    " }
+
+    " nocompatible++ {
+        " Make Y behave like C and D
+        nnoremap Y y$
+        " Make cw behave like it should behave (otherwise, cw = ce)
+        onoremap w :norm w<CR>
+        " Same with cW
+        onoremap W :norm W<CR>
     " }
 
     " Persistence (undo, swap, info, etc) {
@@ -241,7 +248,7 @@ endif
         let g:necoghc_enable_detailed_browse = 1
         let g:neocomplete#enable_at_startup = 1
         let g:neocomplete#enable_smart_case = 1
-        let g:neocomplete#lock_buffer_name_pattern = "\\v(\\.cpp|\\.c|\\.py)$"
+        let g:neocomplete#lock_buffer_name_pattern = "\\v(\\.h|\\.hpp|\\.cpp|\\.c|\\.py)$"
         au BufRead,BufNewFile *.hs setlocal omnifunc=necoghc#omnifunc
         inoremap <expr><Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
         inoremap <expr><S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
