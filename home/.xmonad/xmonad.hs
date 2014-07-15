@@ -32,7 +32,7 @@ import XMonad.Layout.LayoutModifier
 import XMonad.Util.WindowProperties
 import Control.Monad
 import DBus.Client
-import System.Taffybar.XMonadLog (dbusLog)
+-- import System.Taffybar.XMonadLog (dbusLog)
 
 
 -- The preferred terminal program, which is used in a binding below and by
@@ -329,7 +329,8 @@ myStartupHook = do
 --
 main = do
     let dzenSplit = 1000
-    let dzenWidth = 1920 + 1680
+    let dzenWidth = 1920 + 1920
+    -- let dzenWidth = 1920 + 1680
     dzenXMonadBar <- spawnPipe $ "dzen2 -x '0' -y '0' -h '24' -w '" ++ show dzenSplit ++ "' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E'"
     dzenConkyBar <- spawnPipe $ "conky -c /home/twal/.xmonad/.conky_dzen | dzen2 -x '" ++ show dzenSplit ++ "' -w '" ++ show (dzenWidth - dzenSplit) ++ "' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
     --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/misc/.conkyrc"

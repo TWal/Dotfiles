@@ -26,11 +26,11 @@ endif
 
     " Browsers {
         " Tree file browser
-        Bundle 'scrooloose/nerdtree'
+        "Bundle 'scrooloose/nerdtree'
         " No per-tab nerdtree
-        Bundle 'jistr/vim-nerdtree-tabs'
+        "Bundle 'jistr/vim-nerdtree-tabs'
         " Class browser (java, c, c++, python, ...)
-        Bundle 'majutsushi/tagbar'
+        "Bundle 'majutsushi/tagbar'
     " }
 
     " Color things (syntax, helpers, colorscheme, etc) {
@@ -57,22 +57,22 @@ endif
     " Keystroke reducers {
         " Autocompletion
         Bundle 'Valloric/YouCompleteMe'
-        Bundle 'Shougo/neocomplete.vim'
+        "Bundle 'Shougo/neocomplete.vim'
         " Snippets
         Bundle 'SirVer/ultisnips'
         " Comment easily
         Bundle 'scrooloose/nerdcommenter'
         " Autocompletion for haskell
-        Bundle 'ujihisa/neco-ghc'
+        "Bundle 'ujihisa/neco-ghc'
     " }
 
     " Misc {
         " Switch .c / .h
         Bundle 'a.vim'
         " Move easily
-        Bundle 'Lokaltog/vim-easymotion'
+        "Bundle 'Lokaltog/vim-easymotion'
         " Show which lines have been modified
-        Bundle 'airblade/vim-gitgutter'
+        "Bundle 'airblade/vim-gitgutter'
         " Beat sublime text users best argument
         " Bundle 'terryma/vim-multiple-cursors'
         " Syntax checker
@@ -92,17 +92,17 @@ endif
         set history=500 " Keep 500 lines of history
         set showmatch " Show matching brackets.
         set autowrite " Automatically save before commands like :next and :make
-        set ttimeoutlen=100
+        set ttimeoutlen=100 " Don't wait when doing <Esc>O
     " }
 
     " Search {
         set ignorecase " Do case insensitive matching
         set smartcase " Do smart case matching
         set incsearch " Incremental search
+        set hlsearch " Highlight search
     " }
 
     " UI {
-        "set ruler " Display informations about the cursor position in the status bar (no more needed with statusline)
         set showcmd " Show (partial) command in status line.
         set scrolloff=5 " 5 line above / below the cursor when scrolling
         set mat=1 " When typing ')', highlight the matching 0.1s '(' (also work with [] and {})
@@ -149,7 +149,9 @@ endif
         set shiftwidth=4
         set tabstop=4
         autocmd FileType make setlocal noexpandtab
-        autocmd BufEnter keywords.txt noexpandtab "keywords.txt (for arduino lib) need tabs
+        " keywords.txt (for arduino lib) need tabs
+        autocmd BufEnter keywords.txt setlocal noexpandtab
+        autocmd BufEnter,BufRead,BufNewFile */Unvanquished/* setlocal noexpandtab
     " }
 
     " Syntax highlighting {
@@ -201,9 +203,9 @@ endif
         " Make Y behave like C and D
         nnoremap Y y$
         " Make cw behave like it should behave (otherwise, cw = ce)
-        onoremap w :norm w<CR>
+        onoremap <silent> w :norm w<CR>
         " Same with cW
-        onoremap W :norm W<CR>
+        onoremap <silent> W :norm W<CR>
     " }
 
     " Persistence (undo, swap, info, etc) {
@@ -227,6 +229,8 @@ endif
 
         " viminfo stores the the state of your previous editing session
         set viminfo+=n~/.vim/viminfo
+        " Jump to the last position
+        au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 
         if exists("+undofile")
           " undofile - This allows you to use undos after exiting and restarting
