@@ -76,7 +76,7 @@ endif
         " Beat sublime text users best argument
         " Bundle 'terryma/vim-multiple-cursors'
         " Syntax checker
-        Bundle 'scrooloose/syntastic'
+        "Bundle 'scrooloose/syntastic'
     " }
 
     filetype plugin indent on
@@ -160,8 +160,21 @@ endif
         if $TERM == "xterm-256color" || $TERM == "xterm" || $TERM == "screen-256color"
             set t_Co=256 " Add 256-color support
         endif
+
+        let g:jellybeans_overrides = {
+        \   'StatusLine': {
+        \       'guifg': 'c0c0c0', 'guibg': '202020',
+        \       'ctermfg': 'Grey', 'ctermbg': 'Black'
+        \   },
+        \   'StatusLineNC': {
+        \       'guifg': '4E4E4E', 'guibg': '202020',
+        \       'ctermfg': 'Grey', 'ctermbg': 'Black'
+        \   }
+        \}
+
         "colorscheme molokai " Load a nice colorscheme (desert is quite nice too)
         colorscheme jellybeans
+
         " Show trailing whitepace and spaces before a tab:
         :highlight ExtraWhitespace ctermbg=red guibg=red
         :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
@@ -197,15 +210,36 @@ endif
         " Center line when pressing n or N
         "nnoremap n nzz
         "nnoremap N Nzz
+
+        " Exchange [[ and [{, ]] and ]} because [[ and ]] are much easier to
+        " type than [{ and ]} but I use them less often
+        noremap [{ [[
+        noremap ]} ]]
+        noremap [[ [{
+        noremap ]] ]}
     " }
 
     " nocompatible++ {
         " Make Y behave like C and D
         nnoremap Y y$
-        " Make cw behave like it should behave (otherwise, cw = ce)
-        onoremap <silent> w :norm w<CR>
-        " Same with cW
-        onoremap <silent> W :norm W<CR>
+        " Make cw behave like yw, dw (otherwise, cw = ce)
+        function WordMotion(motion)
+            let before = line('.')
+            execute 'normal! v'.v:count1.a:motion
+            if line('.') != before
+                let target = winsaveview()
+                let before = line('.')
+                exe 'normal! ge'
+                if line('.') != before
+                    return
+                else
+                    call winrestview(target)
+                endif
+            endif
+            execute 'normal! h'
+        endfunction
+        onoremap <silent> w :call WordMotion('w')<CR>
+        onoremap <silent> W :call WordMotion('W')<CR>
     " }
 
     " Persistence (undo, swap, info, etc) {
@@ -248,7 +282,7 @@ endif
     " YouCompleteMe, Ultisnips, neco-ghc {
         let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
         let g:ycm_filetype_whitelist = {'cpp' : 1, 'python' : 1, 'c' : 1}
-        let g:UltiSnipsExpandTrigger = '<Leader>s'
+        " let g:UltiSnipsExpandTrigger = '<Leader>s'
         let g:necoghc_enable_detailed_browse = 1
         let g:neocomplete#enable_at_startup = 1
         let g:neocomplete#enable_smart_case = 1

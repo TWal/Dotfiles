@@ -32,7 +32,7 @@ import XMonad.Layout.LayoutModifier
 import XMonad.Util.WindowProperties
 import Control.Monad
 import DBus.Client
--- import System.Taffybar.XMonadLog (dbusLog)
+--import System.Taffybar.XMonadLog (dbusLog)
 
 
 -- The preferred terminal program, which is used in a binding below and by
@@ -184,15 +184,15 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     [((m .|. alt, k), windows $ f i)
         | (i, k) <- zip (XMonad.workspaces conf) [xK_semicolon, xK_comma, xK_period, xK_p, xK_a, xK_o, xK_e, xK_u, xK_i, xK_d, xK_h, xK_t, xK_n, xK_s]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shift)]]
-    -- ++
+     ++
 
     --
     -- mod-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
     -- mod-shift-{w,e,r}, Move client to screen 1, 2, or 3
     --
-    --[((m .|. meta, key), screenWorkspace sc >>= flip whenJust (windows . f))
-    --    | (key, sc) <- zip [xK_w, xK_e, xK_r] [0..]
-    --    , (f, m) <- [(W.view, 0), (W.shift, shift)]]
+    [((m .|. alt, key), screenWorkspace sc >>= flip whenJust (windows . f))
+        | (key, sc) <- zip [xK_g, xK_c, xK_r] [0..]
+        , (f, m) <- [(W.view, 0), (W.shift, shift)]]
 
 
 ------------------------------------------------------------------------
@@ -331,8 +331,8 @@ main = do
     let dzenSplit = 1000
     let dzenWidth = 1920 + 1920
     -- let dzenWidth = 1920 + 1680
-    dzenXMonadBar <- spawnPipe $ "dzen2 -x '0' -y '0' -h '24' -w '" ++ show dzenSplit ++ "' -ta 'l' -fg '#FFFFFF' -bg '#1B1D1E'"
-    dzenConkyBar <- spawnPipe $ "conky -c /home/twal/.xmonad/.conky_dzen | dzen2 -x '" ++ show dzenSplit ++ "' -w '" ++ show (dzenWidth - dzenSplit) ++ "' -h '24' -ta 'r' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
+    dzenXMonadBar <- spawnPipe $ "dzen2 -x '0' -y '0' -h '24' -w '" ++ show dzenSplit ++ "' -ta 'l' -fn 'xft:DejaVu Sans Mono-8' -fg '#FFFFFF' -bg '#1B1D1E'"
+    dzenConkyBar <- spawnPipe $ "conky -c /home/twal/.xmonad/.conky_dzen | dzen2 -x '" ++ show dzenSplit ++ "' -w '" ++ show (dzenWidth - dzenSplit) ++ "' -h '24' -ta 'r' -fn 'xft:DejaVu Sans Mono-8' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
     --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/misc/.conkyrc"
     --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/graphs/.conkyrc"
     --conkyRing <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/rings/.conkyrc"
