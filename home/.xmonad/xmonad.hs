@@ -23,58 +23,27 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.FadeInactive
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.EwmhDesktops (ewmh)
 import XMonad.Util.Run
---import XMonad.Layout.IM
 import XMonad.Layout.PerWorkspace
 import XMonad.Layout.Grid
 import Data.Ratio ((%))
 import XMonad.Layout.LayoutModifier
 import XMonad.Util.WindowProperties
+import Graphics.X11.ExtraTypes.XF86
 import Control.Monad
-import DBus.Client
---import System.Taffybar.XMonadLog (dbusLog)
+import XMonad.Layout.NoBorders
+import XMonad.Actions.UpdatePointer
 
+--Accordion, Acordion, Circle?, OneBig, Roledex?
+--Combinator : (MagicFocus?), Magnifier?, Master+ToggleLayout
+--NoBorder
 
--- The preferred terminal program, which is used in a binding below and by
--- certain contrib modules.
---
-myTerminal      = "urxvtc -e tmux"
-
--- Whether focus follows the mouse pointer.
-myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
-
--- Width of the window border in pixels.
---
-myBorderWidth   = 1
-
--- modMask lets you specify which modkey you want to use. The default
--- is mod1Mask ("left alt").  You may also consider using mod3Mask
--- ("right alt"), which does not conflict with emacs keybindings. The
--- "windows key" is usually mod4Mask.
---
-myModMask       = mod4Mask
+--Actions : Submap
 
 alt = mod1Mask
 shift = shiftMask
 meta = mod4Mask
-
--- The default number of workspaces (virtual screens) and their names.
--- By default we use numeric strings, but any string may be used as a
--- workspace name. The number of workspaces is determined by the length
--- of this list.
---
--- A tagging example:
---
--- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
---
---myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
-myWorkspaces    = ["IM", "Mail", "IRC", "Web", "a", "o", "e", "u", "i", "d", "h", "t", "n", "s"]
-
--- Border colors for unfocused and focused windows, respectively.
---
-myNormalBorderColor  = "#dddddd"
-myFocusedBorderColor = "#ff0000"
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -146,7 +115,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- Use this binding with avoidStruts from Hooks.ManageDocks.
     -- See also the statusBar function from Hooks.DynamicLog.
     --
-    -- , ((meta,        xK_b           ), sendMessage ToggleStruts)
+    , ((meta,        xK_x           ), sendMessage ToggleStruts)
 
     -- Quit xmonad (x)
     , ((meta .|. shift, xK_q           ), io (exitWith ExitSuccess))
@@ -165,15 +134,17 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta,           xK_F2          ), spawn "setxkbmap fr bepo -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
     , ((meta,           xK_F3          ), spawn "setxkbmap fr -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
     , ((meta,           xK_F4          ), spawn "setxkbmap us -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
+    , ((meta,           xK_F5          ), spawn "setxkbmap us -option; killall xcape")
 
     -- Lock
-    , ((meta,           xK_BackSpace   ), spawn "xset +dpms && xset dpms 10 10 10 && alock -auth pam && xset dpms 900 900 900")
+    , ((meta,           xK_BackSpace   ), spawn "xset +dpms && xset dpms 10 10 10 && bash ~/.xmonad/lock.sh && xset dpms 900 900 900")
 
     -- Volume control
-    , ((0,              0x1008ff13     ), spawn "amixer -q sset Master 5%+")
-    , ((0,              0x1008ff11     ), spawn "amixer -q sset Master 5%-")
-    , ((0,              0x1008ff13     ), spawn "amixer -q sset Master 5%+")
-    , ((0,              0x1008ff12     ), spawn "amixer -q sset Master toggle")
+    , ((0, xF86XK_AudioRaiseVolume     ), spawn "amixer -q sset Master 5%+")
+    , ((0, xF86XK_AudioLowerVolume     ), spawn "amixer -q sset Master 5%-")
+    , ((0, xF86XK_AudioMute            ), spawn "amixer -q sset Master toggle")
+    , ((0, xF86XK_MonBrightnessUp      ), spawn "xbacklight -inc 5")
+    , ((0, xF86XK_MonBrightnessDown    ), spawn "xbacklight -dec 5")
     ]
     ++
 
@@ -196,7 +167,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
 
 
 ------------------------------------------------------------------------
--- Mouse bindings: default actions bound to mouse events
+
 --
 myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 
@@ -225,23 +196,14 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts.  Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
-myLayout = onWorkspaces ["IM"] imLayout $ customLayouts
+myLayout = avoidStruts . smartBorders $ tiled ||| Mirror tiled ||| Full ||| Grid
   where
-     imLayout = avoidStruts $ withIMs (1%7) [pidginRoster, skypeRoster] Grid
-     pidginRoster = And (ClassName "Pidgin") (Role "buddy_list")
-     skypeRoster = And (ClassName "Skype") (Not (Role "ConversationsWindow"))
-
-     customLayouts = avoidStruts $ tiled ||| Mirror tiled ||| Full ||| Grid
-
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
-
      -- The default number of windows in the master pane
      nmaster = 1
-
      -- Default proportion of screen occupied by master pane
      ratio   = 1/2
-
      -- Percent of screen to increment by when resizing panes
      delta   = 3/100
 
@@ -262,15 +224,14 @@ myLayout = onWorkspaces ["IM"] imLayout $ customLayouts
 --
 myManageHook = (composeAll . concat $
     [ [resource =? r     --> doIgnore         | r <- myIgnores ]
-    , [className =? c    --> doShift "IM"     | c <- myIM      ]
     , [className =? c    --> doShift "Mail"   | c <- myMail    ]
     , [className =? c    --> doShift "IRC"    | c <- myIRC     ]
     , [className =? c    --> doShift "Web"    | c <- myWeb     ]
     , [className =? c    --> doCenterFloat    | c <- myFloats  ]
-    , [isFullscreen      --> myDoFullFloat                       ]
+    , [isFullscreen      --> myDoFullFloat                     ]
+    , [manageDocks]
     ]) where
         myIgnores = ["desktop", "desktop_window", "kdesktop"]
-        myIM = ["Pidgin", "Skype"]
         myMail = ["Thunderbird"]
         myIRC = []
         myWeb = ["Firefox", "Chromium"]
@@ -289,7 +250,7 @@ myDoFullFloat = doF W.focusDown <+> doFullFloat
 -- return (All True) if the default handler is to be run afterwards. To
 -- combine event hooks use mappend or mconcat from Data.Monoid.
 --
-myEventHook = mempty
+myEventHook = docksEventHook
 
 ------------------------------------------------------------------------
 -- Status bars and logging
@@ -297,9 +258,9 @@ myEventHook = mempty
 -- Perform an arbitrary action on each internal state change or X event.
 -- See the 'XMonad.Hooks.DynamicLog' extension for examples.
 --
-myLogHook h = dynamicLogWithPP $ defaultPP
+myLogHook h = (dynamicLogWithPP $ defaultPP
     {
-        ppCurrent           =   dzenColor "#ebac54" "#1B1D1E" . pad
+          ppCurrent           =   dzenColor "#ebac54" "#1B1D1E" . pad
         , ppVisible           =   dzenColor "white" "#1B1D1E" . pad
         , ppHidden            =   dzenColor "white" "#1B1D1E" . pad
         , ppHiddenNoWindows   =   dzenColor "#7b7b7b" "#1B1D1E" . pad
@@ -308,7 +269,10 @@ myLogHook h = dynamicLogWithPP $ defaultPP
         , ppSep               =   "  |  "
         , ppTitle             =   (" " ++) . dzenColor "white" "#1B1D1E" . dzenEscape
         , ppOutput            =   hPutStrLn h
-    }
+    })
+    >> updatePointer (0.5, 0.5) (0, 0)
+
+
 
 ------------------------------------------------------------------------
 -- Startup hook
@@ -331,28 +295,22 @@ main = do
     let dzenSplit = 1000
     let dzenWidth = 1920 + 1920
     -- let dzenWidth = 1920 + 1680
-    dzenXMonadBar <- spawnPipe $ "dzen2 -x '0' -y '0' -h '24' -w '" ++ show dzenSplit ++ "' -ta 'l' -fn 'xft:DejaVu Sans Mono-8' -fg '#FFFFFF' -bg '#1B1D1E'"
-    dzenConkyBar <- spawnPipe $ "conky -c /home/twal/.xmonad/.conky_dzen | dzen2 -x '" ++ show dzenSplit ++ "' -w '" ++ show (dzenWidth - dzenSplit) ++ "' -h '24' -ta 'r' -fn 'xft:DejaVu Sans Mono-8' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
-    --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/misc/.conkyrc"
-    --conkyMisc <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/graphs/.conkyrc"
-    --conkyRing <- spawnPipe "/home/twal/.xmonad/start.sh nice -n 19 conky -c ~/confs/conky/rings/.conkyrc"
+    dzenXMonadBar <- spawnPipe $ "dzen2 -dock -x '0' -y '0' -h '22' -w '" ++ show dzenSplit ++ "' -ta 'l' -fn 'xft:DejaVu Sans Mono-8' -fg '#FFFFFF' -bg '#1B1D1E'"
+    dzenConkyBar <- spawnPipe $ "conky -c /home/twal/.xmonad/conky_dzen | dzen2 -dock -x '" ++ show dzenSplit ++ "' -w '" ++ show (dzenWidth - dzenSplit) ++ "' -h '22' -ta 'r' -fn 'xft:DejaVu Sans Mono-8' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
     spawnPipe "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap; killall xcape; xcape -e 'Control_L=Escape'"
     spawnPipe "/home/twal/.xmonad/start.sh redshift -l 43.63:1.37"
     spawnPipe "/home/twal/.xmonad/start.sh urxvtd"
     spawnPipe "xrandr --output DP-0 --left-of DP-1"
 
-    --client <- connectSession
-    --let pp = defaultPP
-    --taffybar <- spawnPipe "~/.cabal/bin/taffybar"
-    xmonad defaultConfig {
+    xmonad $ defaultConfig {
       -- simple stuff
-        terminal           = myTerminal,
-        focusFollowsMouse  = myFocusFollowsMouse,
-        borderWidth        = myBorderWidth,
-        modMask            = myModMask,
-        workspaces         = myWorkspaces,
-        normalBorderColor  = myNormalBorderColor,
-        focusedBorderColor = myFocusedBorderColor,
+        terminal           = "urxvt -e tmux",
+        focusFollowsMouse  = True,
+        borderWidth        = 0,
+        modMask            = meta,
+        workspaces         = ["IM", "Mail", "IRC", "Web", "a", "o", "e", "u", "i", "d", "h", "t", "n", "s"],
+        normalBorderColor  = "#dddddd",
+        focusedBorderColor = "#ff0000",
 
       -- key bindings
         keys               = myKeys,
@@ -367,46 +325,3 @@ main = do
         startupHook        = myStartupHook
     }
 
--- modified version of XMonad.Layout.IM --
-
--- | Data type for LayoutModifier which converts given layout to IM-layout
--- (with dedicated space for the roster and original layout for chat windows)
-data AddRosters a = AddRosters Rational [Property] deriving (Read, Show)
-
-instance LayoutModifier AddRosters Window where
-  modifyLayout (AddRosters ratio props) = applyIMs ratio props
-  modifierDescription _                = "IMs"
-
--- | Modifier which converts given layout to IMs-layout (with dedicated
--- space for rosters and original layout for chat windows)
-withIMs :: LayoutClass l a => Rational -> [Property] -> l a -> ModifiedLayout AddRosters l a
-withIMs ratio props = ModifiedLayout $ AddRosters ratio props
-
--- | IM layout modifier applied to the Grid layout
-gridIMs :: Rational -> [Property] -> ModifiedLayout AddRosters Grid a
-gridIMs ratio props = withIMs ratio props Grid
-
-hasAnyProperty :: [Property] -> Window -> X Bool
-hasAnyProperty [] _ = return False
-hasAnyProperty (p:ps) w = do
-    b <- hasProperty p w
-    if b then return True else hasAnyProperty ps w
-
--- | Internal function for placing the rosters specified by
--- the properties and running original layout for all chat windows
-applyIMs :: (LayoutClass l Window) =>
-               Rational
-            -> [Property]
-            -> W.Workspace WorkspaceId (l Window) Window
-            -> Rectangle
-            -> X ([(Window, Rectangle)], Maybe (l Window))
-applyIMs ratio props wksp rect = do
-    let stack = W.stack wksp
-    let ws = W.integrate' $ stack
-    rosters <- filterM (hasAnyProperty props) ws
-    let n = {-fromIntegral $-} length rosters
-    let (rostersRect, chatsRect) = splitHorizontallyBy ((fromIntegral n) * ratio) rect
-    let rosterRects = splitHorizontally n rostersRect
-    let filteredStack = stack >>= W.filter (`notElem` rosters)
-    (a,b) <- runLayout (wksp {W.stack = filteredStack}) chatsRect
-    return (zip rosters rosterRects ++ a, b)

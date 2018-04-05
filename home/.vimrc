@@ -9,81 +9,106 @@ endif
 " Plugin management (trough Vundle) {
 
     filetype off
-    set rtp+=~/.vim/bundle/vundle/
-    call vundle#rc()
+    set rtp+=~/.vim/bundle/Vundle.vim
+    call vundle#begin()
 
     " Vundle itself {
         " Plugin managment
-        Bundle 'gmarik/vundle'
+        Plugin 'VundleVim/Vundle.vim'
     " }
 
     " Games {
         " Sokoban
-        Bundle 'sokoban.vim'
+        "Plugin 'sokoban.vim'
         " Tetris
-        Bundle 'TeTrIs.vim'
+        "Plugin 'TeTrIs.vim'
     " }
 
     " Browsers {
         " Tree file browser
-        "Bundle 'scrooloose/nerdtree'
+        "Plugin 'scrooloose/nerdtree'
         " No per-tab nerdtree
-        "Bundle 'jistr/vim-nerdtree-tabs'
+        "Plugin 'jistr/vim-nerdtree-tabs'
         " Class browser (java, c, c++, python, ...)
-        "Bundle 'majutsushi/tagbar'
+        "Plugin 'majutsushi/tagbar'
     " }
 
     " Color things (syntax, helpers, colorscheme, etc) {
         " Syntax for HTML5
-        Bundle 'othree/html5-syntax.vim'
+        "Plugin 'othree/html5-syntax.vim'
         " Syntax for less (the improvement of CSS, not of more)
-        Bundle 'groenewege/vim-less'
+        "Plugin 'groenewege/vim-less'
          "Syntax for CSS3
-        Bundle 'hail2u/vim-css3-syntax'
+        "Plugin 'hail2u/vim-css3-syntax'
         "Color parenthesis differently
-        Bundle 'kien/rainbow_parentheses.vim'
+        "Plugin 'kien/rainbow_parentheses.vim'
         " Molokai colorscheme
-        Bundle 'tomasr/molokai'
+        "Plugin 'tomasr/molokai'
         " Jellybeans colorscheme
-        Bundle 'nanotech/jellybeans.vim'
+        "Plugin 'nanotech/jellybeans.vim'
         " Scala support
-        Bundle 'derekwyatt/vim-scala'
+        "Plugin 'derekwyatt/vim-scala'
         " Add background to terminal vim
-        if $TERM == "xterm-256color" || $TERM == "xterm" || $TERM == "screen-256color"
-            Bundle 'godlygeek/csapprox'
-        endif
+        "if $TERM == "xterm-256color" || $TERM == "xterm" || $TERM == "screen-256color"
+            "Plugin 'godlygeek/csapprox'
+        "endif
+        " Fix colorschemes
+        Plugin 'KevinGoodsell/vim-csexact'
+        " Semantic highlighting
+        "Plugin 'jeaye/color_coded'
+        " Spacemacs colorscheme
+        Plugin 'liuchengxu/space-vim-dark'
     " }
 
     " Keystroke reducers {
         " Autocompletion
-        Bundle 'Valloric/YouCompleteMe'
-        "Bundle 'Shougo/neocomplete.vim'
+        Plugin 'Valloric/YouCompleteMe'
+        "Plugin 'Shougo/neocomplete.vim'
         " Snippets
-        Bundle 'SirVer/ultisnips'
+        "Plugin 'SirVer/ultisnips'
         " Comment easily
-        Bundle 'scrooloose/nerdcommenter'
+        Plugin 'scrooloose/nerdcommenter'
         " Autocompletion for haskell
-        "Bundle 'ujihisa/neco-ghc'
+        Plugin 'ujihisa/neco-ghc'
+        " Haskell utility
+        Plugin 'eagletmt/ghcmod-vim'
+        " ghc-mod dependency
+        Plugin 'Shougo/vimproc.vim'
+        " Generate ycm config files
+        Plugin 'rdnetto/YCM-Generator'
+    " }
+
+    " Language specific {
+        " Coqide-like
+        Plugin 'the-lambda-church/coquille'
+        " coquille dependency
+        Plugin 'let-def/vimbufsync'
+        "Plugin 'eagletmt/coqtop-vim'
+        Plugin 'rust-lang/rust.vim'
+        Plugin 'JuliaEditorSupport/julia-vim'
+        Plugin 'himito/vim-rml'
     " }
 
     " Misc {
         " Switch .c / .h
-        Bundle 'a.vim'
+        Plugin 'a.vim'
         " Move easily
-        "Bundle 'Lokaltog/vim-easymotion'
+        "Plugin 'Lokaltog/vim-easymotion'
         " Show which lines have been modified
-        "Bundle 'airblade/vim-gitgutter'
+        "Plugin 'airblade/vim-gitgutter'
         " Beat sublime text users best argument
-        " Bundle 'terryma/vim-multiple-cursors'
+        " Plugin 'terryma/vim-multiple-cursors'
         " Syntax checker
-        "Bundle 'scrooloose/syntastic'
+        Plugin 'scrooloose/syntastic'
     " }
+
+    call vundle#end()
 
     filetype plugin indent on
 " }
 
 "VIM configuration {
-    " General {
+        " General {
         syntax on " Enable syntax highlighting
         set nocompatible " Be IMproved!
         set autoindent " Indent automatically
@@ -108,7 +133,7 @@ endif
         set mat=1 " When typing ')', highlight the matching 0.1s '(' (also work with [] and {})
 
         set cursorline " Highlight where the cursor is
-        set mouse=a " Enable mouse usage (all modes)
+        "set mouse=a " Enable mouse usage (all modes)
 
         "Set relative number, and absolute number where the 0 is
         set number
@@ -138,7 +163,7 @@ endif
         set statusline+=\ %P "Percent of the file
         set statusline+=\  "Final space
         set laststatus=2
-        set fcs=vert:│ "Solid line for vsplit
+        "set fcs=vert:│ "Solid line for vsplit
         set wildmenu
         set wildmode=list:longest,full
     " }
@@ -172,12 +197,16 @@ endif
         \   }
         \}
 
-        "colorscheme molokai " Load a nice colorscheme (desert is quite nice too)
-        colorscheme jellybeans
+        "colorscheme darkblue " Colorscheme not too ugly which is there by default
+        "colorscheme twilighted " Load a better colorscheme
+        "colorscheme jellybeans
+        colorscheme space-vim-dark
+        hi Normal guibg=#141517
+        let g:csexact_term_override = "tmux.rxvt"
 
         " Show trailing whitepace and spaces before a tab:
-        :highlight ExtraWhitespace ctermbg=red guibg=red
-        :autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+        highlight ExtraWhitespace ctermbg=red guibg=red
+        autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
     " }
 
     " Some mappings {
@@ -281,7 +310,9 @@ endif
 " Plugin configuration {
     " YouCompleteMe, Ultisnips, neco-ghc {
         let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
-        let g:ycm_filetype_whitelist = {'cpp' : 1, 'python' : 1, 'c' : 1}
+        let g:ycm_filetype_whitelist = {'cpp' : 1, 'python' : 1, 'c' : 1, 'haskell': 1, 'rust': 1}
+        let g:ycm_semantic_triggers = {'haskell' : ['.']}
+        let g:ycm_rust_src_path = '~/.vim/thirdparty/rustc-src/src'
         " let g:UltiSnipsExpandTrigger = '<Leader>s'
         let g:necoghc_enable_detailed_browse = 1
         let g:neocomplete#enable_at_startup = 1
@@ -299,10 +330,10 @@ endif
     " }
 
     " Rainbow Parentheses {
-        au VimEnter * RainbowParenthesesToggle
-        au Syntax * RainbowParenthesesLoadRound
-        au Syntax * RainbowParenthesesLoadSquare
-        au Syntax * RainbowParenthesesLoadBraces
+        "au VimEnter * RainbowParenthesesToggle
+        "au Syntax * RainbowParenthesesLoadRound
+        "au Syntax * RainbowParenthesesLoadSquare
+        "au Syntax * RainbowParenthesesLoadBraces
         " au Syntax * RainbowParenthesesLoadChevrons
     " }
     " NERDTree {
@@ -313,33 +344,31 @@ endif
         let g:multi_cursor_exit_from_visual_mode = 0
         let g:multi_cursor_exit_from_insert_mode = 0
     " }
+
+    " Syntastic {
+        set statusline+=%#warningmsg#
+        set statusline+=%{SyntasticStatuslineFlag()}
+        set statusline+=%*
+    " }
+
+    " ghc-mod {
+        au BufRead,BufNewFile *.hs noremap <silent> <buffer> <LocalLeader>w :GhcModTypeInsert<CR>
+        au BufRead,BufNewFile *.hs noremap <silent> <buffer> <LocalLeader>s :GhcModSplitFunCase<CR>
+        au BufRead,BufNewFile *.hs noremap <silent> <buffer> <LocalLeader>q :GhcModType<CR>
+        au BufRead,BufNewFile *.hs noremap <silent> <buffer> <LocalLeader>e :GhcModTypeClear<CR>
+    " }
+
+    " coquille {
+        au FileType coq noremap <buffer> <silent> <Up>    :CoqUndo<CR>
+        au FileType coq noremap <buffer> <silent> <Left>  :CoqToCursor<CR>
+        au FileType coq noremap <buffer> <silent> <Down>  :CoqNext<CR>
+        au FileType coq noremap <buffer> <silent> <Right> :CoqToCursor<CR>
+    " }
+
+    " HOL mode {
+        au! BufRead,BufNewFile *?Script.sml source $HOLDIR/tools/vim/hol.vim
+    " }
 " }
 
-
-" Programmer Dvorak utilities {
-    " Don't hold the shift key to press ':'
-    "nnoremap ; :
-    "nnoremap : ;
-
-    " HJKL => HTNS
-    "noremap t j
-    "noremap T J
-    "noremap j t
-    "noremap J T
-    "noremap <C-w>t <C-w>j
-    "noremap <C-w>j <C-w>t
-
-    "noremap n k
-    "noremap N K
-    "noremap k n
-    "noremap K N
-    "noremap <C-w>n <C-w>k
-    "noremap <C-w>k <C-w>n
-
-    "noremap s l
-    "noremap S L
-    "noremap l s
-    "noremap L S
-
-" }
-
+"let g:opamshare = substitute(system('opam config var share'),'\n$','','''')
+"execute "set rtp+=" . g:opamshare . "/merlin/vim"

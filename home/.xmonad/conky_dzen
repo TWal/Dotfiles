@@ -1,0 +1,7 @@
+background yes
+out_to_console yes
+out_to_x no
+update_interval 1
+ 
+TEXT
+^fg(\#00aaff)^i(/home/twal/.xmonad/dzen2/cpu.xbm) ^fg(\#FFFFFF)${cpu}% ^fg(\#00ff00)^i(/home/twal/.xmonad/dzen2/mem.xbm) ^fg(\#FFFFFF)${memperc}% ^fg(\#0000ff)^i(/home/twal/.xmonad/dzen2/battery.xbm) ^fg(\#FFFFFF)${battery_percent}% ^fg(\#ff0000)^i(/home/twal/.xmonad/dzen2/load.xbm) ^fg(\#FFFFFF)${loadavg 1} ${loadavg 2} ${loadavg 3} ^fg(\#8000ff)^i(/home/twal/.xmonad/dzen2/temp.xbm) ^fg(\#FFFFFF)${acpitemp}°C ^fg(\#ebac54) ^i(/home/twal/.xmonad/dzen2/volume.xbm) ^fg(\#00ffff)${exec amixer get Master | egrep -o "[0-9]+%" | head -1 | egrep -o "[0-9]*"}% ^fg(\#ebac54) ^i(/home/twal/.xmonad/dzen2/clock.xbm) ^fg(\#FFFFFF) ${time %d %m %Y} ^fg(\#ebac54) ${time %R}

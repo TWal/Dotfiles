@@ -5,7 +5,7 @@ zstyle ':completion:*:descriptions' format '%U%B%d%b%u'
 zstyle ':completion:*:warnings' format '%BSorry, no matches for: %d%b'
 
 #Load zsh's correction & extended glob
-setopt correctall extendedglob
+setopt extendedglob #correctall
 
 #History & other
 HISTFILE=~/.zsh_history
@@ -23,10 +23,11 @@ command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 && { c
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias g++std='g++ -std=c++14 -Wall -Wextra -O1'
 
-if [ ! ${TMUX:+$TMUX} ]; then;
-    exec tmux
-fi
+#if [ ! ${TMUX:+$TMUX} ]; then;
+    #exec tmux
+#fi
 
 set -o vi
 bindkey '^p' up-line-or-history

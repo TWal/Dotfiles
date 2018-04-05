@@ -14,7 +14,7 @@ URxvt.url-select.launcher: firefox
 URxvt.iso14755: false
 
 URxvt.foreground: #f2f2f2
-URxvt.background: #333333
+URxvt.background: #111111
 !URxvt.color0: #2E3436
 URxvt.color0: #000000
 URxvt.color1: #CC0000
@@ -40,3 +40,4 @@ Xft.hinting: 1
 Xft.hintstyle: hintmedium
 Xft.rgba: none
 
+URxvt*termName: rxvt-unicode
