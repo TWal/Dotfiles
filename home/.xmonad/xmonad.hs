@@ -1,12 +1,4 @@
 {-# LANGUAGE  MultiParamTypeClasses, TypeSynonymInstances, FlexibleContexts #-}
---
--- xmonad example config file.
---
--- A template showing all available configuration hooks,
--- and how to override the defaults in your own xmonad.hs conf file.
---
--- Normally, you'd only override those defaults you care about.
---
 
 import XMonad
 import Data.Monoid
@@ -16,7 +8,6 @@ import qualified XMonad.StackSet as W
 import qualified Data.Map        as M
 
 import XMonad.Actions.CycleWS
---import XMonad.Actions.KeyRemap
 import Data.List
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.ManageDocks
@@ -44,6 +35,7 @@ import XMonad.Actions.UpdatePointer
 alt = mod1Mask
 shift = shiftMask
 meta = mod4Mask
+setxkbmapCommand = "setxkbmap -option compose:rctrl -option ctrl:nocaps "
 
 ------------------------------------------------------------------------
 -- Key bindings. Add, modify or remove key bindings here.
@@ -130,11 +122,11 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     , ((meta .|. shift, xK_Left        ), shiftToPrev)
 
     -- KeyRemap setup
-    , ((meta,           xK_F1          ), spawn "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap; killall xcape; xcape -e 'Control_L=Escape'")
-    , ((meta,           xK_F2          ), spawn "setxkbmap fr bepo -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
-    , ((meta,           xK_F3          ), spawn "setxkbmap fr -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
-    , ((meta,           xK_F4          ), spawn "setxkbmap us -option ctrl:nocaps; killall xcape; xcape -e 'Control_L=Escape'")
-    , ((meta,           xK_F5          ), spawn "setxkbmap us -option; killall xcape")
+    , ((meta,           xK_F1          ), spawn $ setxkbmapCommand ++ "us dvorak && xmodmap ~/.xmonad/dvorak_remap_xmodmap; killall xcape; xcape -e 'Control_L=Escape'")
+    , ((meta,           xK_F2          ), spawn $ setxkbmapCommand ++ "fr bepo; killall xcape; xcape -e 'Control_L=Escape'")
+    , ((meta,           xK_F3          ), spawn $ setxkbmapCommand ++ "fr; killall xcape; xcape -e 'Control_L=Escape'")
+    , ((meta,           xK_F4          ), spawn $ setxkbmapCommand ++ "us; killall xcape; xcape -e 'Control_L=Escape'")
+    , ((meta,           xK_F5          ), spawn $ "setxkbmap us -option; killall xcape")
 
     -- Lock
     , ((meta,           xK_BackSpace   ), spawn "xset +dpms && xset dpms 10 10 10 && bash ~/.xmonad/lock.sh && xset dpms 900 900 900")
@@ -235,7 +227,7 @@ myManageHook = (composeAll . concat $
         myMail = ["Thunderbird"]
         myIRC = []
         myWeb = ["Firefox", "Chromium"]
-        myFloats = ["Xmessage", "Downloads", "Download"]
+        myFloats = ["Gxmessage", "Xmessage", "Downloads", "Download"]
 
 -- a trick for fullscreen but stil allow focusing of other WSs
 myDoFullFloat :: ManageHook
@@ -284,7 +276,6 @@ myLogHook h = (dynamicLogWithPP $ defaultPP
 -- By default, do nothing.
 myStartupHook = do
     setWMName "LG3D"
---    setDefaultKeyRemap emptyKeyRemap [dvorakAzertyRemap, emptyKeyRemap]
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
@@ -292,15 +283,12 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
-    let dzenSplit = 1000
-    let dzenWidth = 1920 + 1920
-    -- let dzenWidth = 1920 + 1680
-    dzenXMonadBar <- spawnPipe $ "dzen2 -dock -x '0' -y '0' -h '22' -w '" ++ show dzenSplit ++ "' -ta 'l' -fn 'xft:DejaVu Sans Mono-8' -fg '#FFFFFF' -bg '#1B1D1E'"
-    dzenConkyBar <- spawnPipe $ "conky -c /home/twal/.xmonad/conky_dzen | dzen2 -dock -x '" ++ show dzenSplit ++ "' -w '" ++ show (dzenWidth - dzenSplit) ++ "' -h '22' -ta 'r' -fn 'xft:DejaVu Sans Mono-8' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
-    spawnPipe "setxkbmap us dvorak -option ctrl:nocaps && xmodmap ~/.xmonad/dvorak_remap_xmodmap; killall xcape; xcape -e 'Control_L=Escape'"
-    spawnPipe "/home/twal/.xmonad/start.sh redshift -l 43.63:1.37"
-    spawnPipe "/home/twal/.xmonad/start.sh urxvtd"
-    spawnPipe "xrandr --output DP-0 --left-of DP-1"
+    let conkyBarWidth = 610 -- found this value experimentally
+    let screenWidth = 1920 -- one 1080p screen
+    let dzenConfig = "-h '22' -fn 'xft:DejaVu Sans Mono-8' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
+    dzenXMonadBar <- spawnPipe $ "dzen2 -dock -x '0' -w '" ++ show (screenWidth-conkyBarWidth)++ "' -ta 'l' " ++ dzenConfig
+    dzenConkyBar <- spawnPipe $ "conky -c /home/twal/.xmonad/conky_dzen | dzen2 -dock -x '" ++ show (screenWidth-conkyBarWidth) ++ "' -w '" ++ show conkyBarWidth ++ "' -ta 'r' " ++ dzenConfig
+    spawnPipe $ setxkbmapCommand ++ "us dvorak && xmodmap ~/.xmonad/dvorak_remap_xmodmap; killall xcape; xcape -e 'Control_L=Escape'"
 
     xmonad $ defaultConfig {
       -- simple stuff
@@ -320,8 +308,7 @@ main = do
         layoutHook         = myLayout,
         manageHook         = myManageHook,
         handleEventHook    = myEventHook,
-        --logHook            = dbusLog client,
-        logHook            = myLogHook dzenXMonadBar >> fadeInactiveLogHook 0xdddddddd,
+        logHook            = myLogHook dzenXMonadBar,
         startupHook        = myStartupHook
     }
 
