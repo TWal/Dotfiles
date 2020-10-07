@@ -262,7 +262,7 @@ myLogHook h = (dynamicLogWithPP $ defaultPP
         , ppTitle             =   (" " ++) . dzenColor "white" "#1B1D1E" . dzenEscape
         , ppOutput            =   hPutStrLn h
     })
-    >> updatePointer (0.5, 0.5) (0, 0)
+    -- >> updatePointer (0.5, 0.5) (0, 0)
 
 
 
@@ -283,7 +283,7 @@ myStartupHook = do
 -- Run xmonad with the settings you specify. No need to modify this.
 --
 main = do
-    let conkyBarWidth = 610 -- found this value experimentally
+    let conkyBarWidth = 640 -- found this value experimentally
     let screenWidth = 1920 -- one 1080p screen
     let dzenConfig = "-h '22' -fn 'xft:DejaVu Sans Mono-8' -bg '#1B1D1E' -fg '#FFFFFF' -y '0'"
     dzenXMonadBar <- spawnPipe $ "dzen2 -dock -x '0' -w '" ++ show (screenWidth-conkyBarWidth)++ "' -ta 'l' " ++ dzenConfig
@@ -294,7 +294,7 @@ main = do
       -- simple stuff
         terminal           = "urxvt -e tmux",
         focusFollowsMouse  = True,
-        borderWidth        = 0,
+        borderWidth        = 1,
         modMask            = meta,
         workspaces         = ["IM", "Mail", "IRC", "Web", "a", "o", "e", "u", "i", "d", "h", "t", "n", "s"],
         normalBorderColor  = "#dddddd",

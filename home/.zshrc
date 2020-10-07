@@ -24,6 +24,7 @@ command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 && { c
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias g++std='g++ -std=c++14 -Wall -Wextra -O1'
+alias hol='rlwrap hol'
 
 #if [ ! ${TMUX:+$TMUX} ]; then;
     #exec tmux
@@ -53,3 +54,8 @@ tmux-change-session() {
 use_ccache() {
     export PATH=/usr/lib64/ccache/bin:$PATH
 }
+
+fstardoc() {
+    vim - -es -c 'g/val/,/let/-1p' -c 'g/^$\nlet/,/[\])][ \t\n]*=[ \t\n]*\w/p' -c 'q!'
+}
+#exec fish

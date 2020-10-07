@@ -68,25 +68,29 @@ endif
         "Plugin 'SirVer/ultisnips'
         " Comment easily
         Plugin 'scrooloose/nerdcommenter'
+        " haskell-ide-engine dependency
+        Plugin 'autozimu/LanguageClient-neovim'
         " Autocompletion for haskell
-        Plugin 'ujihisa/neco-ghc'
+        " Plugin 'ujihisa/neco-ghc'
         " Haskell utility
-        Plugin 'eagletmt/ghcmod-vim'
+        " Plugin 'eagletmt/ghcmod-vim'
         " ghc-mod dependency
-        Plugin 'Shougo/vimproc.vim'
+        " Plugin 'Shougo/vimproc.vim'
         " Generate ycm config files
         Plugin 'rdnetto/YCM-Generator'
     " }
 
     " Language specific {
         " Coqide-like
-        Plugin 'the-lambda-church/coquille'
+        " Plugin 'the-lambda-church/coquille'
         " coquille dependency
-        Plugin 'let-def/vimbufsync'
+        " Plugin 'let-def/vimbufsync'
         "Plugin 'eagletmt/coqtop-vim'
-        Plugin 'rust-lang/rust.vim'
+        " Plugin 'rust-lang/rust.vim'
         Plugin 'JuliaEditorSupport/julia-vim'
         Plugin 'himito/vim-rml'
+        Plugin 'tidalcycles/vim-tidal'
+        Plugin 'FStarLang/VimFStar'
     " }
 
     " Misc {
@@ -118,6 +122,7 @@ endif
         set showmatch " Show matching brackets.
         set autowrite " Automatically save before commands like :next and :make
         set ttimeoutlen=100 " Don't wait when doing <Esc>O
+        set nomodeline
     " }
 
     " Search {
@@ -166,6 +171,8 @@ endif
         "set fcs=vert:│ "Solid line for vsplit
         set wildmenu
         set wildmode=list:longest,full
+
+        set shortmess-=S
     " }
 
     " Tabs {
@@ -212,7 +219,7 @@ endif
     " Some mappings {
         " Leader
         let mapleader = "-"
-        let maplocalleader = "\\"
+        let maplocalleader = " "
         " Keep selection when indenting
         xnoremap < <gv
         xnoremap > >gv
@@ -233,8 +240,8 @@ endif
         noremap <Right> <nop>
 
         " Move in tabs
-        noremap <C-p> gT
-        noremap <C-n> gt
+        nnoremap <C-p> gT
+        nnoremap <C-n> gt
 
         " Center line when pressing n or N
         "nnoremap n nzz
@@ -349,6 +356,11 @@ endif
         set statusline+=%#warningmsg#
         set statusline+=%{SyntasticStatuslineFlag()}
         set statusline+=%*
+    " }
+
+    " haskell-ide-engine {
+        let g:LanguageClient_serverCommands = { 'haskell': ['hie-wrapper'] }
+        let g:LanguageClient_rootMarkers = ['*.cabal', 'stack.yaml']
     " }
 
     " ghc-mod {
