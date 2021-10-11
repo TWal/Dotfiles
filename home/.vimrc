@@ -48,12 +48,6 @@ endif
         "Plugin 'nanotech/jellybeans.vim'
         " Scala support
         "Plugin 'derekwyatt/vim-scala'
-        " Add background to terminal vim
-        "if $TERM == "xterm-256color" || $TERM == "xterm" || $TERM == "screen-256color"
-            "Plugin 'godlygeek/csapprox'
-        "endif
-        " Fix colorschemes
-        Plugin 'KevinGoodsell/vim-csexact'
         " Semantic highlighting
         "Plugin 'jeaye/color_coded'
         " Spacemacs colorscheme
@@ -190,7 +184,7 @@ endif
         au BufRead,BufNewFile *.ino set filetype=cpp " Arduino's .ino are cpp files
         set background=dark " Enable dark background
         if $TERM == "xterm-256color" || $TERM == "xterm" || $TERM == "screen-256color"
-            set t_Co=256 " Add 256-color support
+            set termguicolors
         endif
 
         let g:jellybeans_overrides = {
@@ -209,7 +203,6 @@ endif
         "colorscheme jellybeans
         colorscheme space-vim-dark
         hi Normal guibg=#141517
-        let g:csexact_term_override = "tmux.rxvt"
 
         " Show trailing whitepace and spaces before a tab:
         highlight ExtraWhitespace ctermbg=red guibg=red

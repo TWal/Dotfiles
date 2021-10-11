@@ -145,7 +145,7 @@ myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
     -- mod-shift-[1..9], Move client to workspace N
     --
     [((m .|. alt, k), windows $ f i)
-        | (i, k) <- zip (XMonad.workspaces conf) [xK_semicolon, xK_comma, xK_period, xK_p, xK_a, xK_o, xK_e, xK_u, xK_i, xK_d, xK_h, xK_t, xK_n, xK_s]
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_apostrophe, xK_comma, xK_period, xK_p, xK_a, xK_o, xK_e, xK_u, xK_i, xK_d, xK_h, xK_t, xK_n, xK_s]
         , (f, m) <- [(W.greedyView, 0), (W.shift, shift)]]
      ++
 
@@ -216,16 +216,16 @@ myLayout = avoidStruts . smartBorders $ tiled ||| Mirror tiled ||| Full ||| Grid
 --
 myManageHook = (composeAll . concat $
     [ [resource =? r     --> doIgnore         | r <- myIgnores ]
+    , [className =? c    --> doShift "Pass"   | c <- myPass    ]
     , [className =? c    --> doShift "Mail"   | c <- myMail    ]
-    , [className =? c    --> doShift "IRC"    | c <- myIRC     ]
     , [className =? c    --> doShift "Web"    | c <- myWeb     ]
     , [className =? c    --> doCenterFloat    | c <- myFloats  ]
     , [isFullscreen      --> myDoFullFloat                     ]
     , [manageDocks]
     ]) where
         myIgnores = ["desktop", "desktop_window", "kdesktop"]
+        myPass = ["KeePassXC"]
         myMail = ["Thunderbird"]
-        myIRC = []
         myWeb = ["Firefox", "Chromium"]
         myFloats = ["Gxmessage", "Xmessage", "Downloads", "Download"]
 
@@ -292,11 +292,11 @@ main = do
 
     xmonad $ defaultConfig {
       -- simple stuff
-        terminal           = "urxvt -e tmux",
+        terminal           = "alacritty -e tmux",
         focusFollowsMouse  = True,
         borderWidth        = 1,
         modMask            = meta,
-        workspaces         = ["IM", "Mail", "IRC", "Web", "a", "o", "e", "u", "i", "d", "h", "t", "n", "s"],
+        workspaces         = ["Pass", "Mail", "Term", "Web", "a", "o", "e", "u", "i", "d", "h", "t", "n", "s"],
         normalBorderColor  = "#dddddd",
         focusedBorderColor = "#ff0000",
 

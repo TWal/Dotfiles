@@ -58,4 +58,13 @@ use_ccache() {
 fstardoc() {
     vim - -es -c 'g/val/,/let/-1p' -c 'g/^$\nlet/,/[\])][ \t\n]*=[ \t\n]*\w/p' -c 'q!'
 }
+
+spectrogram() {
+    sox "$1" -n spectrogram -o - | display -
+}
+
+wav2flac() {
+    ffmpeg -i $1 -compression_level 12 $2
+}
+
 #exec fish
