@@ -1,0 +1,29 @@
+// Adapted from dvorak-alt-intl, but AltGr+shift+X to uppercase version of AltGr+X
+default partial alphanumeric_keys
+xkb_symbols "basic" {
+    include "us(dvorak)"
+    name[Group1]= "English (Dvorak, sec. alt. intl.)";
+
+    key <AE04> { [         4,  dollar,    EuroSign ] };
+
+    key <AD02> { [     comma,    less,  adiaeresis, Adiaresis ] };
+    key <AD03> { [    period, greater, ecircumflex, Ecircumflex   ] };
+    key <AD04> { [         p,       P,  ediaeresis, Ediaeresis ] };
+    key <AD05> { [         y,       Y,  udiaeresis, UDiaeresis ] };
+    key <AD08> { [         c,       C,    ccedilla, Ccedilla ] };
+
+    key <AC01> { [         a,       A,      agrave, Agrave ] };
+    key <AC02> { [         o,       O, ocircumflex, Ocircumflex ] };
+    key <AC03> { [         e,       E,      eacute, Eacute ] };
+    key <AC04> { [         u,       U, ucircumflex, Ucircumflex ] };
+    key <AC05> { [         i,       I, icircumflex, Icircumflex ] };
+    key <AC10> { [         s,       S,      ssharp, U1E9E ] };
+
+    key <AB01> { [ semicolon,   colon, acircumflex, Acircumflex] };
+    key <AB02> { [         q,       Q,  odiaeresis, Odiaeresis ] };
+    key <AB03> { [         j,       J,      egrave, Egrave ] };
+    key <AB04> { [         k,       K,      ugrave, Ugrave ] };
+    key <AB05> { [         x,       X,  idiaeresis, Idiaeresis ] };
+
+    include "level3(ralt_switch)"
+};

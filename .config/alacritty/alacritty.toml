@@ -1,0 +1,33 @@
+[colors.bright]
+black = "#555753"
+blue = "#729FCF"
+cyan = "#34E2E2"
+green = "#8AE234"
+magenta = "#AD7FA8"
+red = "#EF2929"
+white = "#EEEEEC"
+yellow = "#FCE94F"
+
+[colors.normal]
+black = "#000000"
+blue = "#3465A4"
+cyan = "#06989A"
+green = "#4E9A06"
+magenta = "#75507B"
+red = "#CC0000"
+white = "#D3D7CF"
+yellow = "#C4A000"
+
+[colors.primary]
+background = "#111111"
+foreground = "#f2f2f2"
+
+[env]
+TERM = "xterm-256color"
+
+[font]
+size = 11.0
+
+[font.normal]
+family = "DejaVu Sans Mono"
+style = "Regular"

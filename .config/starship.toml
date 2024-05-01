@@ -1,0 +1,59 @@
+add_newline = false
+continuation_prompt = ">"
+format = "$username@$hostname:$directory$character"
+right_format = "$cmd_duration$status$jobs$git_branch$git_metrics$git_state$git_status$sudo"
+
+[character]
+error_symbol = "[\\$](red)"
+success_symbol = "[\\$](white)"
+vicmd_symbol = "[\\$](green)"
+
+[cmd_duration]
+format = "\\[[$duration]($style)\\]"
+show_notifications = false
+
+[directory]
+fish_style_pwd_dir_length = 1
+format = "[$path]($style)"
+repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)"
+repo_root_style = "bold blue"
+style = "blue"
+
+[git_branch]
+format = "\\[[$branch(:$remote_branch)]($style)"
+style = "bold blue"
+
+[git_metrics]
+disabled = false
+format = "( \\(([+$added]($added_style))(/[-$deleted]($deleted_style)))"
+
+[git_status]
+format = "$modified$untracked\\]"
+modified = ", [$count](yellow)\\)"
+untracked = " [$count](purple)"
+
+[hostname]
+disabled = false
+format = "[$hostname](purple)[$ssh_symbol](bold blue)"
+ssh_only = false
+trim_at = ""
+
+[jobs]
+format = "\\[[$number$symbol]($style)\\]"
+style = "bold yellow"
+symbol = "j"
+
+[status]
+disabled = false
+format = "\\[[$status]($style)\\]"
+
+[sudo]
+disabled = false
+format = "\\[[$symbol]($style)\\]"
+style = "bold red"
+symbol = "!"
+
+[username]
+format = "[$user]($style)"
+show_always = true
+style_user = "red"

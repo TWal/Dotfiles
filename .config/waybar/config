@@ -1,0 +1,114 @@
+// https://git.sr.ht/~oscarcp/ghostfiles/tree/master/item/waybar/config
+// https://github.com/Alexays/Waybar/wiki/Module:-Idle-Inhibitor
+{
+    // "layer": "top", // Waybar at top layer
+    // "position": "bottom", // Waybar position (top|bottom|left|right)
+    "height": 20, // Waybar height (to be removed for auto height)
+    // "width": 1280, // Waybar width
+    "spacing": 4, // Gaps between modules (4px)
+    // Choose the order of the modules
+    "modules-left": ["sway/workspaces", "sway/mode", "custom/media"],
+    "modules-center": ["sway/window"],
+    "modules-right": ["idle_inhibitor", "sway/language", "network", "cpu", "cpu#load", "memory", "temperature", "backlight", "battery", "pulseaudio", "clock", "tray"],
+    // Modules configuration
+    // "sway/workspaces": {
+    //     "disable-scroll": true,
+    //     "all-outputs": true,
+    //     "format": "{name}: {icon}",
+    //     "format-icons": {
+    //         "1": "",
+    //         "2": "",
+    //         "3": "",
+    //         "4": "",
+    //         "5": "",
+    //         "urgent": "",
+    //         "focused": "",
+    //         "default": ""
+    //     }
+    // },
+    "sway/workspaces": {
+        "disable-scroll": true,
+        "format": "{name}",
+    },
+    "sway/mode": {
+        "format": "<span style=\"italic\">{}</span>"
+    },
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "",
+            "deactivated": ""
+        }
+    },
+    "tray": {
+        // "icon-size": 21,
+        "spacing": 10
+    },
+    "clock": {
+        "format": "<span color=\"#ebac54\"></span> {:%d/%H:%M}",
+        "format-alt": "{:%Y-%m-%d}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
+        "interval": 1,
+    },
+    "cpu": {
+        "format": "<span color=\"#00aaff\"></span> {usage:2}%",
+        "tooltip": false,
+        "interval": 2,
+    },
+    "cpu#load": {
+        "format": "<span color=\"#ff0000\"></span> {load:4}",
+        "tooltip": false,
+        "interval": 1,
+    },
+    "memory": {
+        "format": "<span color=\"#00ff00\"></span> {}%",
+        "interval": 2,
+    },
+    "custom/memory": {
+        "exec": "$HOME/.config/waybar/memory.py",
+        "format": "<span color=\"#00ff00\"></span> {}%",
+        "interval": 2,
+    },
+    "temperature": {
+        // "thermal-zone": 2,
+        // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "critical-threshold": 80,
+        "format": "<span color=\"#8000ff\">{icon}</span> {temperatureC}°C",
+        "format-icons": ["", "", ""]
+    },
+    "backlight": {
+        // "device": "acpi_video1",
+        "format": "{icon} {percent}%",
+        "format-icons": [""]
+    },
+    "battery": {
+        "states": {
+            // "good": 95,
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "<span color=\"#0000ff\">{icon}</span> {capacity:2}%",
+        "format-alt": "<span color=\"#0000ff\">{icon}</span> {time}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "<span color=\"#0000ff\"></span> {essid} ({signalStrength}%)",
+        "format-ethernet": "<span color=\"#0000ff\"></span> {ipaddr}/{cidr}",
+        "tooltip-format": " {ifname} via {gwaddr}",
+        "format-linked": "<span color=\"#0000ff\"></span> {ifname} (No IP)",
+        "format-disconnected": "⚠ Disconnected",
+        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+    },
+    "pulseaudio": {
+        // "scroll-step": 1, // %, can be a float
+        "format": "<span color=\"#ebac54\">{icon}</span> {volume:2}%",
+        "format-muted": " {format_source}",
+        "format-source": "{volume}%",
+        "format-source-muted": "",
+        "format-icons": {
+            "default": [""]
+        },
+        "on-click": "pavucontrol"
+    },
+}
