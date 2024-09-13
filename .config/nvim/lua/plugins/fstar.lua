@@ -6,7 +6,7 @@ return {
 
         fstar.setup({
             -- fstar_lsp_path = "/home/twallez/perso/code/fstar-lsp/proxy.sh",
-            fstar_lsp_path = "/home/twallez/perso/code/fstar-lsp/target/debug/fstar-lsp",
+            fstar_lsp_path = vim.fn.expand("~/perso/code/fstar-lsp/target/debug/fstar-lsp"),
         })
 
         vim.keymap.set("n", "<C-c><C-v>", fstar.commands.verify_all, { remap = false, desc = "verify buffer" })

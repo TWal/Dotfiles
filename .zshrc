@@ -30,7 +30,7 @@ fi
 eval "$(direnv hook zsh)"
 
 # Display a fortune
-command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 && { cowsay -f `ls /usr/share/cows | shuf -n1 | cut -d'.' -f1` "`fortune -s`"}
+command -v cowsay > /dev/null 2>&1 && command -v fortune > /dev/null 2>&1 && { cowsay -f `ls /usr/share/cowsay/cows | shuf -n1 | rev | cut -d'.' --complement -f1 | rev` "`fortune -s`"}
 
 # Commands
 
@@ -47,9 +47,43 @@ wav2flac() {
 }
 
 fip() {
-    mpv 'https://stream.radiofrance.fr/fip/fip.m3u8?id=radiofrance'
+    PROCESSED_STREAM_NAME="fip$(echo $1 | tr -d '_')"
+    PROCESSED_API_NAME="fip${1+_}${1}"
+    STREAM_URL="https://stream.radiofrance.fr/$PROCESSED_STREAM_NAME/${PROCESSED_STREAM_NAME}_hifi.m3u8" 
+    API_URL="https://www.radiofrance.fr/fip/api/live/webradios/$PROCESSED_API_NAME"
+    # Run everything in a subprocess so that zsh don't print a line for the background process
+    (
+        # "bash strict mode" to exit when there is an error
+        set -euo pipefail
+        # kill all background process when this process exits
+        # (see https://stackoverflow.com/questions/360201/how-do-i-kill-background-processes-jobs-when-my-shell-script-exits/2173421#2173421 )
+        trap "trap - SIGTERM && kill 0" SIGINT SIGTERM EXIT
+        (
+           OLD_TITLE=""
+           while true; do
+               JSON=$(curl -s $API_URL)
+               FIRST_LINE=$(echo $JSON | jq -r '.now.firstLine.title')
+               SECOND_LINE=$(echo $JSON | jq -r '.now.secondLine.title')
+               CUR_TITLE="$FIRST_LINE -- $SECOND_LINE"
+               # Sometimes during lives there the same title every 10s,
+               # only print it if it has changed
+               if [[ $OLD_TITLE != $CUR_TITLE ]]; then
+                   OLD_TITLE=$CUR_TITLE
+                   CUR_DATE=$(date '+%H:%M')
+                   echo -e "\033[2K\r$CUR_DATE | $CUR_TITLE"
+               fi
+               sleep $(echo $JSON | jq -r '.delayToRefresh/1000')
+           done
+        ) &
+        mpv "$STREAM_URL"
+    )
 }
 
+_fip() {
+    compadd electro groove hiphop jazz metal nouveautes pop reggae rock sacre_francais world
+}
+
+compdef _fip fip
 
 # Aliases
 alias grep='grep --color=auto'

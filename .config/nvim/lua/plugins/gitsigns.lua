@@ -41,7 +41,7 @@ return {
                 map("n", "<Leader>vdc", function() vim.ui.input({ prompt = "Commit id: "}, function(input) gitsigns.diffthis(input) end) end, { desc = "Diff" })
 
                 map("n", "<Leader>vP", gitsigns.preview_hunk, { desc = "Preview hunk"})
-                map("n", "<Leader>vb", function() gitsigns.blame_line{full=true} end)
+                map("n", "<Leader>vb", function() gitsigns.blame_line{full=true} end, { desc = "Blame line" })
 
                 -- Text object
                 map({"o", "x"}, "ih", ":<C-U>Gitsigns select_hunk<CR>")

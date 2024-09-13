@@ -7,19 +7,19 @@ return {
 
         local wk = require("which-key")
         wk.setup({
-            -- your configuration comes here
-            -- or leave it empty to use the default settings
-            -- refer to the configuration section below
+            icons = {
+                mappings = false,
+            },
         })
 
-        wk.register({
-            ["<Leader>f"] = { name = "+file" },
-            ["<Leader>b"] = { name = "+buffer" },
-            ["<Leader>d"] = { name = "+diagnostic" },
-            ["<Leader>v"] = { name = "+git" },
-            ["<Leader>vs"] = { name = "+stage" },
-            ["<Leader>vt"] = { name = "+toggle" },
-            ["<Leader>vd"] = { name = "+diff" },
+        wk.add({
+            { "<Leader>f", group = "file" },
+            { "<Leader>b", group = "buffer" },
+            { "<Leader>d", group = "diagnostic" },
+            { "<Leader>v", group = "git" },
+            { "<Leader>vs", group = "stage" },
+            { "<Leader>vt", group = "toggle" },
+            { "<Leader>vd", group = "diff" },
         })
     end,
 }
