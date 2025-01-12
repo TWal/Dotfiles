@@ -50,7 +50,7 @@ fip() {
     PROCESSED_STREAM_NAME="fip$(echo $1 | tr -d '_')"
     PROCESSED_API_NAME="fip${1+_}${1}"
     STREAM_URL="https://stream.radiofrance.fr/$PROCESSED_STREAM_NAME/${PROCESSED_STREAM_NAME}_hifi.m3u8" 
-    API_URL="https://www.radiofrance.fr/fip/api/live/webradios/$PROCESSED_API_NAME"
+    API_URL="https://www.radiofrance.fr/fip/api/live?webradio=$PROCESSED_API_NAME"
     # Run everything in a subprocess so that zsh don't print a line for the background process
     (
         # "bash strict mode" to exit when there is an error

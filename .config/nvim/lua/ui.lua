@@ -36,3 +36,6 @@ vim.opt.statusline =
  .. " %P" -- Percent of the file
  .. " " -- Final space
 
+-- Wild menu
+
+vim.opt.wildmode = "longest:full,full"

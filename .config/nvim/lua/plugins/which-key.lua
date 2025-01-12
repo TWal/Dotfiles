@@ -10,6 +10,9 @@ return {
             icons = {
                 mappings = false,
             },
+            defer = function(ctx)
+                return ctx.mode == "v" or ctx.mode == "V" or ctx.mode == "<C-V>"
+            end,
         })
 
         wk.add({
@@ -20,6 +23,7 @@ return {
             { "<Leader>vs", group = "stage" },
             { "<Leader>vt", group = "toggle" },
             { "<Leader>vd", group = "diff" },
+            { "<Leader>oe", group = "edit org" },
         })
     end,
 }

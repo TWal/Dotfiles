@@ -18,3 +18,10 @@ vim.api.nvim_create_autocmd({"BufEnter"}, {
     callback = function() vim.opt.expandtab = false end,
 })
 
+-- Persistence
+
+vim.opt.undofile = true
+
+vim.api.nvim_create_autocmd({"BufReadPost"}, {
+    callback = function() vim.cmd("normal! g`\"") end,
+})
